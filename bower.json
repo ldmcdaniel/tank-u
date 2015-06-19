@@ -1,0 +1,23 @@
+{
+  "name": "tower-defense",
+  "version": "1.0.0",
+  "homepage": "https://github.com/ldmcdaniel/tower-defense",
+  "authors": [
+    "Lucas McDaniel <ldmcdaniel@gmail.com>"
+  ],
+  "main": "index.html",
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "~2.1.4",
+    "bootstrap": "~3.3.5",
+    "firebase": "~2.2.7",
+    "phaser": "~2.3.0"
+  }
+}
