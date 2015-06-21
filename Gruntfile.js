@@ -72,7 +72,8 @@ module.exports = function(grunt) {
               '**',
               '!**/*.jade',
               '!**/*.scss',
-              '!**/*.js'
+              '!**/*.js',
+              '**/*.jpg'
             ],
             dest: 'public/',
             filter: 'isFile'
