@@ -27,7 +27,6 @@ PhaserGame.prototype = {
     this.sand = this.map.createLayer('Dirt');
     this.grass = this.map.createLayer('Grass');
     this.trees = this.map.createLayer('Tree bases');
-    this.bridges = this.map.createLayer('Tree Tops and Bridges');
 
     this.test = this.add.sprite(-16, 116, 'boat');
     this.test.scale.setTo(2, 2);
@@ -35,28 +34,37 @@ PhaserGame.prototype = {
     this.bmd = this.add.bitmapData(game.width, game.height);
     this.bmd.addToWorld();
     this.plot();
+    this.bridges = this.map.createLayer('Tree Tops and Bridges');
+
   },
 
   plot: function () {
     this.path = [];
-
+    var ix = 0;
     var x = 1 / 500;
 
     for (var i = 0; i <= 1; i += x) {
       var px = this.math.catmullRomInterpolation(this.points.x, i);
       var py = this.math.catmullRomInterpolation(this.points.y, i);
-      this.path.push( { x: px, y: py });
-      this.bmd.rect(px, py, 1, 1, 'rgba(255, 255, 255, 1)');
+      // this.path.push( { x: px, y: py });
+      // this.bmd.rect(px, py, 1, 1, 'rgba(255, 255, 255, 1)');
+      var node = {x: px, y: py, angle: 0};
+      if (ix > 0) {
+        node.angle = this.math.angleBetweenPoints(this.path[ix - 1], node);
+      }
+      this.path.push(node);
+      ix++;
     }
 
-    for (var p = 0; p < this.points.x.length; p++) {
-      this.bmd.rect(this.points.x[p]-3, this.points.y[p]-3, 6, 6, 'rgba(255, 0, 0, 1)');
-    }
+    // for (var p = 0; p < this.points.x.length; p++) {
+    //   this.bmd.rect(this.points.x[p]-3, this.points.y[p]-3, 6, 6, 'rgba(255, 0, 0, 1)');
+    // }
 
   },
   update: function (){
     this.test.x = this.path[this.pi].x;
     this.test.y = this.path[this.pi].y;
+    this.test.rotation = this.path[this.pi].angle;
 
     this.pi++;
 
