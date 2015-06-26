@@ -1,23 +1,13 @@
-var map, water, sand, grass, trees, bridges, game, marker, layer, cursors, PhaserGame, currentTile;
+PhaserGame.Game = function (game) {
+  this.map;
+  this.road;
+  this.trees;
+  this.turrets;
+  this.test;
+  this.bmd;
+}
 
-var game = new Phaser.Game(1024, 768, Phaser.AUTO, 'game');
-
-PhaserGame = function () {};
-
-PhaserGame.prototype = {
-  preload: function () {
-    //This adds the json file from tiles of the map and my images
-    this.load.tilemap('map', 'assets/river-defense.json', null, Phaser.Tilemap.TILED_JSON);
-    this.load.image('terrain', 'assets/terrain_atlas.png');
-    this.load.image('turrets', 'assets/turrets32.png');
-    this.load.image('tank', 'assets/enemy10.png');
-    this.points= {
-      'x': [-16, 100, 200, 300, 400, 500, 600, 700, 740, 675, 600, 500, 400, 300, 205, 180, 190, 290, 390, 490, 590, 690, 790, 850, 860],
-      'y': [130, 130, 130, 130, 130, 145, 160, 180, 250, 310, 340, 350, 350, 365, 400, 475, 550, 590, 610, 623, 630, 638, 650, 720, 800]
-    };
-    this.pi = 0;
-  },
-
+PhaserGame.Game.prototype = {
   create: function () {
     this.map = this.add.tilemap('map');
 
@@ -35,11 +25,9 @@ PhaserGame.prototype = {
     this.test = this.add.sprite(-16, 116, 'tank');
     // this.test.scale.setTo(1, 1);
     this.test.anchor.set(0.5);
-
     this.bmd = this.add.bitmapData(game.width, game.height);
     this.bmd.addToWorld();
     this.plot();
-
     this.bridges = this.map.createLayer('Tree Tops and Bridges');
 
     //Mouse marker
@@ -110,11 +98,22 @@ PhaserGame.prototype = {
     if (this.pi >= this.path.length) {
       this.pi = 0;
     }
+  },
+
+  quitGame: function (pointer) {
+
+    //  Here you should destroy anything you no longer need.
+    //  Stop music, delete sprites, purge caches, free resources, all that good stuff.
+
+    game.state.start('MainMenu');
+
   }
-}
 
-game.state.add('Game', PhaserGame, true);
+};
 
+game.state.add('Boot', PhaserGame.Boot);
+game.state.add('Preloader', PhaserGame.Preloader);
+game.state.add('MainMenu', PhaserGame.MainMenu);
+game.state.add('Game', PhaserGame.Game);
 
-
-
+game.state.start('Boot');
