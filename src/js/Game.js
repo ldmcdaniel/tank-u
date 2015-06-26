@@ -1,13 +1,14 @@
+var map, road, trees, turrets, test, bmd, marker, currentTile;
+
 PhaserGame.Game = function (game) {
-  this.map;
-  this.road;
-  this.trees;
-  this.turrets;
-  this.test;
-  this.bmd;
 }
 
 PhaserGame.Game.prototype = {
+
+  preload: function () {
+
+  },
+
   create: function () {
     this.map = this.add.tilemap('map');
 
@@ -46,6 +47,12 @@ PhaserGame.Game.prototype = {
     this.path = [];
     var ix = 0;
     var x = 1 / game.width;
+
+    this.points= {
+      'x': [-16, 100, 200, 300, 400, 500, 600, 700, 740, 675, 600, 500, 400, 300, 205, 180, 190, 290, 390, 490, 590, 690, 790, 850, 860],
+      'y': [130, 130, 130, 130, 130, 145, 160, 180, 250, 310, 340, 350, 350, 365, 400, 475, 550, 590, 610, 623, 630, 638, 650, 720, 800]
+    };
+    this.pi = 0;
 
     for (var i = 0; i <= 1; i += x) {
       var px = this.math.catmullRomInterpolation(this.points.x, i);
@@ -98,15 +105,6 @@ PhaserGame.Game.prototype = {
     if (this.pi >= this.path.length) {
       this.pi = 0;
     }
-  },
-
-  quitGame: function (pointer) {
-
-    //  Here you should destroy anything you no longer need.
-    //  Stop music, delete sprites, purge caches, free resources, all that good stuff.
-
-    game.state.start('MainMenu');
-
   }
 
 };
