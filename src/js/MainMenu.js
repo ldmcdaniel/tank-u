@@ -1,5 +1,5 @@
 PhaserGame.MainMenu = function (game) {
-  //create an variables with this.varName here for use in the prototype for the menu
+  //create this.varName here for use in the prototype for the menu
 };
 
 PhaserGame.MainMenu.prototype = {
@@ -35,3 +35,5 @@ PhaserGame.MainMenu.prototype = {
   }
 
 };
+
+game.state.add('MainMenu', PhaserGame.MainMenu);

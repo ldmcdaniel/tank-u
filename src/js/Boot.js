@@ -13,7 +13,7 @@ PhaserGame.Boot.prototype = {
 
     this.input.maxPointers= 1;
 
-    this.scale.scaleMode = Phaser.ScaleManager.RESIZE;
+    // this.scale.scaleMode = Phaser.ScaleManager.RESIZE;
 
   },
 
@@ -30,3 +30,5 @@ PhaserGame.Boot.prototype = {
   }
 
 };
+
+game.state.add('Boot', PhaserGame.Boot);
