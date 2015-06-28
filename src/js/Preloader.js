@@ -5,6 +5,8 @@ PhaserGame.Preloader = function (game) {
 PhaserGame.Preloader.prototype = {
   preload: function () {
     //Load the elements from the Boot.js for the splash screen
+    this.load.tilemap('title', 'assets/title-screen.json', null, Phaser.Tilemap.TILED_JSON);
+    this.load.image('tanks', 'assets/15_tank_set 68x68.png');
 
     //Load the rest of the element for our game
     //This adds the json file from tiles of the map and my images

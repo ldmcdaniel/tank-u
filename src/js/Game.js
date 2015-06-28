@@ -10,7 +10,7 @@ PhaserGame.Game.prototype = {
 
     //The first param is the name of the tileset from tiled; the second is from game.load.image
     this.map.addTilesetImage('terrain_atlas', 'terrain');
-    this.map.addTilesetImage('turrets32', 'turrets')
+    this.map.addTilesetImage('turrets32', 'turrets');
 
     //Layers from my map
     this.road = this.map.createLayer('Road');
