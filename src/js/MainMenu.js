@@ -1,11 +1,10 @@
-var title;
-
 PhaserGame.MainMenu = function (game) {
   //create this.varName here for use in the prototype for the menu
 };
 
 PhaserGame.MainMenu.prototype = {
   create: function () {
+
     this.map = this.add.tilemap('title');
     this.map.addTilesetImage('terrain_atlas', 'terrain');
     this.map.addTilesetImage('15_tank_set 68x68', 'tanks');

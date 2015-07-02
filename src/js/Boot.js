@@ -25,6 +25,8 @@ PhaserGame.Boot.prototype = {
 
   create: function () {
 
+    this.game.physics.startSystem(Phaser.Physics.ARCADE);
+    this.cursors = game.input.keyboard.createCursorKeys();
     this.state.start('Preloader')
 
   }
