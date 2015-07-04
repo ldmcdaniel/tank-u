@@ -1,24 +1,14 @@
 var map, road, trees, turrets, test, bmd, marker, currentTile, enemies, waveCreator, enemyWave, turretPosition, mouseDownCount, bullets;
-var fireRate0 = 300;
+var fireRate = 300;
 var nextFire0 = 0;
-var fireRate1 = 300;
 var nextFire1 = 0;
-
-var fireRate2 = 300;
 var nextFire2 = 0;
-var fireRate3 = 300;
 var nextFire3 = 0;
-var fireRate4 = 300;
 var nextFire4 = 0;
-var fireRate5 = 300;
 var nextFire5 = 0;
-var fireRate6 = 300;
 var nextFire6 = 0;
-var fireRate7 = 300;
 var nextFire7 = 0;
-var fireRate8 = 300;
 var nextFire8 = 0;
-var fireRate9 = 300;
 var nextFire9 = 0;
 
 
@@ -69,7 +59,7 @@ PhaserGame.Game.prototype = {
 
     this.bullets.enableBody = true;
     this.bullets.physicsBodyType = Phaser.Physics.ARCADE;
-    this.bullets.createMultiple(500, 'bullet');
+    this.bullets.createMultiple(500, 'bullet1');
     this.bullets.setAll('checkWorldBounds', true);
     this.bullets.setAll('outOfBoundsKill', true);
 
@@ -175,95 +165,104 @@ PhaserGame.Game.prototype = {
     this.fire9();
 
   },
-
   fire0: function () {
     if (game.time.now > nextFire0 && this.bullets.countDead() > 0) {
-      nextFire0 = game.time.now + fireRate0;
+      nextFire0 = game.time.now + fireRate;
       var bullet = this.bullets.getFirstDead();
-      bullet.reset(this.turretPosition[0].x + 16, this.turretPosition[0].y + 16);
+      bullet.anchor.set(0.5);
+      bullet.reset(this.turretPosition[0].x, this.turretPosition[0].y);
       bullet.rotation = game.physics.arcade.angleBetween(this.turretPosition[0], this.enemyWave[1])
       game.physics.arcade.moveToObject(bullet, this.enemyWave[1], 300);
     }
   },
   fire1: function () {
     if (game.time.now > nextFire1 && this.bullets.countDead() > 0) {
-      nextFire1 = game.time.now + fireRate1;
+      nextFire1 = game.time.now + fireRate;
       var bullet = this.bullets.getFirstDead();
-      bullet.reset(this.turretPosition[1].x + 16, this.turretPosition[1].y + 16);
-      bullet.rotation = game.physics.arcade.angleBetween(this.turretPosition[1], this.enemyWave[0])
-      game.physics.arcade.moveToObject(bullet, this.enemyWave[0], 300);
+      bullet.anchor.set(0.5);
+      bullet.reset(this.turretPosition[1].x, this.turretPosition[1].y);
+      bullet.rotation = game.physics.arcade.angleBetween(this.turretPosition[1], this.enemyWave[1])
+      game.physics.arcade.moveToObject(bullet, this.enemyWave[1], 300);
     }
   },
   fire2: function () {
     if (game.time.now > nextFire2 && this.bullets.countDead() > 0) {
-      nextFire2 = game.time.now + fireRate2;
+      nextFire2 = game.time.now + fireRate;
       var bullet = this.bullets.getFirstDead();
-      bullet.reset(this.turretPosition[2].x + 16, this.turretPosition[2].y + 16);
-      bullet.rotation = game.physics.arcade.angleBetween(this.turretPosition[2], this.enemyWave[0])
-      game.physics.arcade.moveToObject(bullet, this.enemyWave[0], 300);
+      bullet.anchor.set(0.5);
+      bullet.reset(this.turretPosition[2].x, this.turretPosition[2].y);
+      bullet.rotation = game.physics.arcade.angleBetween(this.turretPosition[2], this.enemyWave[1])
+      game.physics.arcade.moveToObject(bullet, this.enemyWave[1], 300);
     }
   },
   fire3: function () {
     if (game.time.now > nextFire3 && this.bullets.countDead() > 0) {
-      nextFire3 = game.time.now + fireRate3;
+      nextFire3 = game.time.now + fireRate;
       var bullet = this.bullets.getFirstDead();
-      bullet.reset(this.turretPosition[3].x + 16, this.turretPosition[3].y + 16);
-      bullet.rotation = game.physics.arcade.angleBetween(this.turretPosition[3], this.enemyWave[0])
-      game.physics.arcade.moveToObject(bullet, this.enemyWave[0], 300);
+      bullet.anchor.set(0.5);
+      bullet.reset(this.turretPosition[3].x, this.turretPosition[3].y);
+      bullet.rotation = game.physics.arcade.angleBetween(this.turretPosition[3], this.enemyWave[1])
+      game.physics.arcade.moveToObject(bullet, this.enemyWave[1], 300);
     }
   },
   fire4: function () {
     if (game.time.now > nextFire4 && this.bullets.countDead() > 0) {
-      nextFire4 = game.time.now + fireRate4;
+      nextFire4 = game.time.now + fireRate;
       var bullet = this.bullets.getFirstDead();
-      bullet.reset(this.turretPosition[4].x + 16, this.turretPosition[4].y + 16);
-      bullet.rotation = game.physics.arcade.angleBetween(this.turretPosition[4], this.enemyWave[0])
-      game.physics.arcade.moveToObject(bullet, this.enemyWave[0], 300);
+      bullet.anchor.set(0.5);
+      bullet.reset(this.turretPosition[4].x, this.turretPosition[4].y);
+      bullet.rotation = game.physics.arcade.angleBetween(this.turretPosition[4], this.enemyWave[1])
+      game.physics.arcade.moveToObject(bullet, this.enemyWave[1], 300);
     }
   },
   fire5: function () {
     if (game.time.now > nextFire5 && this.bullets.countDead() > 0) {
-      nextFire5 = game.time.now + fireRate5;
+      nextFire5 = game.time.now + fireRate;
       var bullet = this.bullets.getFirstDead();
-      bullet.reset(this.turretPosition[5].x + 16, this.turretPosition[5].y + 16);
-      bullet.rotation = game.physics.arcade.angleBetween(this.turretPosition[5], this.enemyWave[0])
-      game.physics.arcade.moveToObject(bullet, this.enemyWave[0], 300);
+      bullet.anchor.set(0.5);
+      bullet.reset(this.turretPosition[5].x, this.turretPosition[5].y);
+      bullet.rotation = game.physics.arcade.angleBetween(this.turretPosition[5], this.enemyWave[1])
+      game.physics.arcade.moveToObject(bullet, this.enemyWave[1], 300);
     }
   },
   fire6: function () {
     if (game.time.now > nextFire6 && this.bullets.countDead() > 0) {
-      nextFire6 = game.time.now + fireRate6;
+      nextFire6 = game.time.now + fireRate;
       var bullet = this.bullets.getFirstDead();
-      bullet.reset(this.turretPosition[6].x + 16, this.turretPosition[6].y + 16);
-      bullet.rotation = game.physics.arcade.angleBetween(this.turretPosition[6], this.enemyWave[0])
-      game.physics.arcade.moveToObject(bullet, this.enemyWave[0], 300);
+      bullet.anchor.set(0.5);
+      bullet.reset(this.turretPosition[6].x, this.turretPosition[6].y);
+      bullet.rotation = game.physics.arcade.angleBetween(this.turretPosition[6], this.enemyWave[1])
+      game.physics.arcade.moveToObject(bullet, this.enemyWave[1], 300);
     }
   },
   fire7: function () {
     if (game.time.now > nextFire7 && this.bullets.countDead() > 0) {
-      nextFire7 = game.time.now + fireRate7;
+      nextFire7 = game.time.now + fireRate;
       var bullet = this.bullets.getFirstDead();
-      bullet.reset(this.turretPosition[7].x + 16, this.turretPosition[7].y + 16);
-      bullet.rotation = game.physics.arcade.angleBetween(this.turretPosition[7], this.enemyWave[0])
-      game.physics.arcade.moveToObject(bullet, this.enemyWave[0], 300);
+      bullet.anchor.set(0.5);
+      bullet.reset(this.turretPosition[7].x, this.turretPosition[7].y);
+      bullet.rotation = game.physics.arcade.angleBetween(this.turretPosition[7], this.enemyWave[1])
+      game.physics.arcade.moveToObject(bullet, this.enemyWave[1], 300);
     }
   },
   fire8: function () {
     if (game.time.now > nextFire8 && this.bullets.countDead() > 0) {
-      nextFire8 = game.time.now + fireRate8;
+      nextFire8 = game.time.now + fireRate;
       var bullet = this.bullets.getFirstDead();
-      bullet.reset(this.turretPosition[8].x + 16, this.turretPosition[8].y + 16);
-      bullet.rotation = game.physics.arcade.angleBetween(this.turretPosition[8], this.enemyWave[0])
-      game.physics.arcade.moveToObject(bullet, this.enemyWave[0], 300);
+      bullet.anchor.set(0.5);
+      bullet.reset(this.turretPosition[8].x, this.turretPosition[8].y);
+      bullet.rotation = game.physics.arcade.angleBetween(this.turretPosition[8], this.enemyWave[1])
+      game.physics.arcade.moveToObject(bullet, this.enemyWave[1], 300);
     }
   },
   fire9: function () {
     if (game.time.now > nextFire9 && this.bullets.countDead() > 0) {
-      nextFire9 = game.time.now + fireRate9;
+      nextFire9 = game.time.now + fireRate;
       var bullet = this.bullets.getFirstDead();
-      bullet.reset(this.turretPosition[9].x + 16, this.turretPosition[9].y + 16);
-      bullet.rotation = game.physics.arcade.angleBetween(this.turretPosition[9], this.enemyWave[0])
-      game.physics.arcade.moveToObject(bullet, this.enemyWave[0], 300);
+      bullet.anchor.set(0.5);
+      bullet.reset(this.turretPosition[9].x, this.turretPosition[9].y);
+      bullet.rotation = game.physics.arcade.angleBetween(this.turretPosition[9], this.enemyWave[1])
+      game.physics.arcade.moveToObject(bullet, this.enemyWave[1], 300);
     }
   },
   render: function () {
