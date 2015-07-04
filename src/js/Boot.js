@@ -1,6 +1,9 @@
-var PhaserGame = {};
-
 var game = new Phaser.Game(1024, 768, Phaser.AUTO, 'game');
+
+var PhaserGame = function (){
+  this.weapons = [];
+  this.currentWeapon = 0;
+};
 
 PhaserGame.Boot = function (game) {
 

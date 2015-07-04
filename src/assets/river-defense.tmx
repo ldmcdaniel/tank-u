@@ -57,9 +57,9 @@
  <tileset firstgid="1035" name="turrets64" tilewidth="64" tileheight="64">
   <image source="turrets64.png" width="320" height="128"/>
  </tileset>
- <layer name="Path" width="32" height="24">
+ <layer name="Path" width="32" height="24" visible="0">
   <data encoding="base64" compression="zlib">
-   eJzlllGKwzAMRItvH8e5SI+ye5Ng32EbVo++GBrisNufCoQTl3hG8kjq7fbZNqdfrw8vWtlr8f718Bx7U/i2dw/fnq/iV2FtGEusTftT7NfA8v4cv8FlCS/BKR9wy+np5sLzFOcUYeEtVnMjX0vsc8YrW/XtKpxJGNxJTvu4q+JsnRMPuZgH7ofvVnFfYoUnXFdhwgWOVRzrRX20dJy/zZwv3xMa4v5GLesuj7DBrMoFcVvPIzaFljkbXVsT905/6HEWbhvE7uPIig1NFb2Ta/cFtEBuzmoPrRoHbDCN6/PdC7J0OaI7dAp3cBzLqrqaVQuul9G7Bjt3Z4M5Esc0GDPGfbvXbTy+L9btqOUuz2fq/q+tKPdoraTnXKGf/Jctad/b0Z/rzJqET+54X+l1GLMPDOsBLNeIZ5M1TM/yjDpbF/QB8F71maoV3vSDuePiuTySC2q+6DzPVfdk98qW9nlZhD/CoTfH1cfv2UuOPJO5i3fWtHPAfHoX/mbUj/8jGf8HyQn/5w==
+   eJzlltFtwzAMRANvb1laJKO0mxjSDo1RPuRZaALLRfITAoRtBdIdqSOZy+WzbZl+vd4868lai++vm6dYm8O3tWv49n4WvwprwyjxbFqfY70GlteX+A0uJTwHp/SEW5rubi68z3FOFhbe4mlu5KvEOmc8slV7V+HMwuBO0rSPuyrO1jnxkItl4H7Yt/7BHZ5wXYUJFzhWcawn9dEO7HO+fE9oiPsbtXRg3yzMqlwQt/U8YnNombPRtTVx7fSHHhfhtkHsPo6k2NBU1je5dl9AC+TmqPbQqnHABtO4Pt+9IEmXI7pDp3AHx7GsqqtFteB6Gb1rLHVngzkax39qzb1u4/F98qwzVrqYn/XNV1hW7tFanu5zhX7yKivTvrejP9eZNQmf1PE+0+swZh8Y1gNYrhHPJtcuPcsz6mhd0AfAe9Rnqp7wph8sHRfP5ZFcUPNZ53muuie7V7Zpn5ci/BEOvTmuPn7PXnLkmcxdvKumU5cD5tM7ewr14/9Ixv8B9ML7qQ==
   </data>
  </layer>
  <layer name="Road" width="32" height="24">
@@ -93,7 +93,7 @@
   </data>
  </layer>
  <objectgroup name="Collisions" visible="0"/>
- <layer name="Turrets" width="32" height="24">
+ <layer name="Turrets" width="32" height="24" visible="0">
   <data encoding="base64" compression="zlib">
    eJztzTERAAAIBKDXs39mYzgIBUhu1CQ9RzkAADy1irgADA==
   </data>
