@@ -21,9 +21,7 @@ PhaserGame.MainMenu.prototype = {
 
     // var startLabel = game.add.text(100, game.world.height-100, 'Press "w" to Begin', {font: '20px Arial', fill: '#eeeeee'});
 
-    var wKey = game.input.keyboard.addKey(Phaser.Keyboard.W);
-
-    wKey.onDown.addOnce(this.start, this);
+    game.input.onDown.addOnce(this.start, this);
 
   },
 

@@ -27,6 +27,9 @@ PhaserGame.Preloader.prototype = {
     this.load.image('bullet', 'assets/bullet_right.png');
     this.load.image('bullet1', 'assets/bullet.png');
 
+    this.load.spritesheet('explosion', 'assets/explosion192.png', 192, 192);
+    this.load.image('coin', 'assets/coin64.png');
+
     var welcome = game.add.text(100, 100, 'coming...', {font: '30px Courier', fill: '#eeeeee'});
 
 
