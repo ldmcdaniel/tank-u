@@ -50,7 +50,7 @@ PhaserGame.Game.prototype = {
       this.enemyWave[i] = this.enemies.create(-16, 116, this.enemyWave[i]);
       this.enemyWave[i].anchor.set(0.5);
       this.enemyWave[i].animations.add('explosion', false);
-      this.enemyWave[i].health = i*3;
+      this.enemyWave[i].health = 30;
     }
 
     ///////////////////////
@@ -176,22 +176,24 @@ PhaserGame.Game.prototype = {
       this.pi = 0;
     }
 
-
-    for(var i = 0; i < this.turretPosition.length; i++) {
-        this.turretPosition[i].rotation = game.physics.arcade.angleBetween(this.turretPosition[i], this.enemyWave[1]);
-
+    for (var i = 0; i < this.enemyWave.length; i++) {
+      for (var j = 0; j < this.turretPosition.length; j++) {
+        if (this.physics.arcade.distanceToXY(this.enemyWave[i], this.turretPosition[j].x, this.turretPosition[j].y) < 200 && this.enemyWave[i].alive === true) {
+          this.turretPosition[j].rotation = game.physics.arcade.angleBetween(this.turretPosition[j], this.enemyWave[i]);
+        }
       }
+    }
 
     this.fire0();
     this.fire1();
     this.fire2();
-    // this.fire3();
-    // this.fire4();
-    // this.fire5();
-    // this.fire6();
-    // this.fire7();
-    // this.fire8();
-    // this.fire9();
+    this.fire3();
+    this.fire4();
+    this.fire5();
+    this.fire6();
+    this.fire7();
+    this.fire8();
+    this.fire9();
 
     game.physics.arcade.overlap(this.bullets, this.enemies, this.collisionHandler);
   },
@@ -220,8 +222,12 @@ PhaserGame.Game.prototype = {
       var bullet = this.bullets.getFirstDead();
       bullet.anchor.set(0.5);
       bullet.reset(this.turretPosition[0].x, this.turretPosition[0].y);
-      bullet.rotation = game.physics.arcade.angleBetween(this.turretPosition[0], this.enemyWave[1])
-      game.physics.arcade.moveToObject(bullet, this.enemyWave[1], 300);
+      for (var i = 0; i < this.enemyWave.length; i++) {
+        if (this.physics.arcade.distanceToXY(this.enemyWave[i], this.turretPosition[0].x, this.turretPosition[0].y) < 200 && this.enemyWave[i].alive === true && this.enemyWave[i].x > 0 && this.enemyWave[i].y < 768) {
+          bullet.rotation = game.physics.arcade.angleBetween(this.turretPosition[0], this.enemyWave[i]);
+          game.physics.arcade.moveToObject(bullet, this.enemyWave[i], 300)
+        }
+      }
     }
   },
   fire1: function () {
@@ -230,8 +236,12 @@ PhaserGame.Game.prototype = {
       var bullet = this.bullets.getFirstDead();
       bullet.anchor.set(0.5);
       bullet.reset(this.turretPosition[1].x, this.turretPosition[1].y);
-      bullet.rotation = game.physics.arcade.angleBetween(this.turretPosition[1], this.enemyWave[1])
-      game.physics.arcade.moveToObject(bullet, this.enemyWave[1], 300);
+      for (var i = 0; i < this.enemyWave.length; i++) {
+        if (this.physics.arcade.distanceToXY(this.enemyWave[i], this.turretPosition[1].x, this.turretPosition[1].y) < 200 && this.enemyWave[i].alive === true && this.enemyWave[i].x > 0 && this.enemyWave[i].y < 768) {
+          bullet.rotation = game.physics.arcade.angleBetween(this.turretPosition[1], this.enemyWave[i])
+          game.physics.arcade.moveToObject(bullet, this.enemyWave[i], 300)
+        }
+      }
     }
   },
   fire2: function () {
@@ -240,8 +250,12 @@ PhaserGame.Game.prototype = {
       var bullet = this.bullets.getFirstDead();
       bullet.anchor.set(0.5);
       bullet.reset(this.turretPosition[2].x, this.turretPosition[2].y);
-      bullet.rotation = game.physics.arcade.angleBetween(this.turretPosition[2], this.enemyWave[1])
-      game.physics.arcade.moveToObject(bullet, this.enemyWave[1], 300);
+      for (var i = 0; i < this.enemyWave.length; i++) {
+        if (this.physics.arcade.distanceToXY(this.enemyWave[i], this.turretPosition[2].x, this.turretPosition[2].y) < 200 && this.enemyWave[i].alive === true && this.enemyWave[i].x > 0 && this.enemyWave[i].y < 768) {
+          bullet.rotation = game.physics.arcade.angleBetween(this.turretPosition[2], this.enemyWave[i])
+          game.physics.arcade.moveToObject(bullet, this.enemyWave[i], 300)
+        }
+      }
     }
   },
   fire3: function () {
@@ -250,8 +264,13 @@ PhaserGame.Game.prototype = {
       var bullet = this.bullets.getFirstDead();
       bullet.anchor.set(0.5);
       bullet.reset(this.turretPosition[3].x, this.turretPosition[3].y);
-      bullet.rotation = game.physics.arcade.angleBetween(this.turretPosition[3], this.enemyWave[1])
-      game.physics.arcade.moveToObject(bullet, this.enemyWave[1], 300);
+      for (var i = 0; i < this.enemyWave.length; i++) {
+        if (this.physics.arcade.distanceToXY(this.enemyWave[i], this.turretPosition[3].x, this.turretPosition[3].y) < 200 && this.enemyWave[i].alive === true && this.enemyWave[i].x > 0 && this.enemyWave[i].y < 768) {
+          bullet.rotation = game.physics.arcade.angleBetween(this.turretPosition[3], this.enemyWave[i])
+          game.physics.arcade.moveToObject(bullet, this.enemyWave[i], 300)
+        }
+      }
+
     }
   },
   fire4: function () {
@@ -260,8 +279,12 @@ PhaserGame.Game.prototype = {
       var bullet = this.bullets.getFirstDead();
       bullet.anchor.set(0.5);
       bullet.reset(this.turretPosition[4].x, this.turretPosition[4].y);
-      bullet.rotation = game.physics.arcade.angleBetween(this.turretPosition[4], this.enemyWave[1])
-      game.physics.arcade.moveToObject(bullet, this.enemyWave[1], 300);
+      for (var i = 0; i < this.enemyWave.length; i++) {
+        if (this.physics.arcade.distanceToXY(this.enemyWave[i], this.turretPosition[4].x, this.turretPosition[4].y) < 200 && this.enemyWave[i].alive === true && this.enemyWave[i].x > 0 && this.enemyWave[i].y < 768) {
+          bullet.rotation = game.physics.arcade.angleBetween(this.turretPosition[4], this.enemyWave[i])
+          game.physics.arcade.moveToObject(bullet, this.enemyWave[i], 300)
+        }
+      }
     }
   },
   fire5: function () {
@@ -270,8 +293,12 @@ PhaserGame.Game.prototype = {
       var bullet = this.bullets.getFirstDead();
       bullet.anchor.set(0.5);
       bullet.reset(this.turretPosition[5].x, this.turretPosition[5].y);
-      bullet.rotation = game.physics.arcade.angleBetween(this.turretPosition[5], this.enemyWave[1])
-      game.physics.arcade.moveToObject(bullet, this.enemyWave[1], 300);
+      for (var i = 0; i < this.enemyWave.length; i++) {
+        if (this.physics.arcade.distanceToXY(this.enemyWave[i], this.turretPosition[5].x, this.turretPosition[5].y) < 200 && this.enemyWave[i].alive === true && this.enemyWave[i].x > 0 && this.enemyWave[i].y < 768) {
+          bullet.rotation = game.physics.arcade.angleBetween(this.turretPosition[5], this.enemyWave[i])
+          game.physics.arcade.moveToObject(bullet, this.enemyWave[i], 300)
+        }
+      }
     }
   },
   fire6: function () {
@@ -280,8 +307,12 @@ PhaserGame.Game.prototype = {
       var bullet = this.bullets.getFirstDead();
       bullet.anchor.set(0.5);
       bullet.reset(this.turretPosition[6].x, this.turretPosition[6].y);
-      bullet.rotation = game.physics.arcade.angleBetween(this.turretPosition[6], this.enemyWave[1])
-      game.physics.arcade.moveToObject(bullet, this.enemyWave[1], 300);
+      for (var i = 0; i < this.enemyWave.length; i++) {
+        if (this.physics.arcade.distanceToXY(this.enemyWave[i], this.turretPosition[6].x, this.turretPosition[6].y) < 200 && this.enemyWave[i].alive === true && this.enemyWave[i].x > 0 && this.enemyWave[i].y < 768) {
+          bullet.rotation = game.physics.arcade.angleBetween(this.turretPosition[6], this.enemyWave[i])
+          game.physics.arcade.moveToObject(bullet, this.enemyWave[i], 300)
+        }
+      }
     }
   },
   fire7: function () {
@@ -290,8 +321,12 @@ PhaserGame.Game.prototype = {
       var bullet = this.bullets.getFirstDead();
       bullet.anchor.set(0.5);
       bullet.reset(this.turretPosition[7].x, this.turretPosition[7].y);
-      bullet.rotation = game.physics.arcade.angleBetween(this.turretPosition[7], this.enemyWave[1])
-      game.physics.arcade.moveToObject(bullet, this.enemyWave[1], 300);
+      for (var i = 0; i < this.enemyWave.length; i++) {
+        if (this.physics.arcade.distanceToXY(this.enemyWave[i], this.turretPosition[7].x, this.turretPosition[7].y) < 200 && this.enemyWave[i].alive === true && this.enemyWave[i].x > 0 && this.enemyWave[i].y < 768) {
+          bullet.rotation = game.physics.arcade.angleBetween(this.turretPosition[7], this.enemyWave[i])
+          game.physics.arcade.moveToObject(bullet, this.enemyWave[i], 300)
+        }
+      }
     }
   },
   fire8: function () {
@@ -300,8 +335,12 @@ PhaserGame.Game.prototype = {
       var bullet = this.bullets.getFirstDead();
       bullet.anchor.set(0.5);
       bullet.reset(this.turretPosition[8].x, this.turretPosition[8].y);
-      bullet.rotation = game.physics.arcade.angleBetween(this.turretPosition[8], this.enemyWave[1])
-      game.physics.arcade.moveToObject(bullet, this.enemyWave[1], 300);
+      for (var i = 0; i < this.enemyWave.length; i++) {
+        if (this.physics.arcade.distanceToXY(this.enemyWave[i], this.turretPosition[8].x, this.turretPosition[8].y) < 200 && this.enemyWave[i].alive === true && this.enemyWave[i].x > 0 && this.enemyWave[i].y < 768) {
+          bullet.rotation = game.physics.arcade.angleBetween(this.turretPosition[8], this.enemyWave[i])
+          game.physics.arcade.moveToObject(bullet, this.enemyWave[i], 300)
+        }
+      }
     }
   },
   fire9: function () {
@@ -310,8 +349,12 @@ PhaserGame.Game.prototype = {
       var bullet = this.bullets.getFirstDead();
       bullet.anchor.set(0.5);
       bullet.reset(this.turretPosition[9].x, this.turretPosition[9].y);
-      bullet.rotation = game.physics.arcade.angleBetween(this.turretPosition[9], this.enemyWave[1])
-      game.physics.arcade.moveToObject(bullet, this.enemyWave[1], 300);
+      for (var i = 0; i < this.enemyWave.length; i++) {
+        if (this.physics.arcade.distanceToXY(this.enemyWave[i], this.turretPosition[9].x, this.turretPosition[9].y) < 200 && this.enemyWave[i].alive === true && this.enemyWave[i].x > 0 && this.enemyWave[i].y < 768) {
+          bullet.rotation = game.physics.arcade.angleBetween(this.turretPosition[9], this.enemyWave[i])
+          game.physics.arcade.moveToObject(bullet, this.enemyWave[i], 300)
+        }
+      }
     }
   },
   render: function () {
