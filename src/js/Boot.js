@@ -53,6 +53,7 @@ PhaserGame.Boot.prototype = {
 
     //Load the assets needed for your preloader bootscreen here
 
+
   },
 
   create: function () {

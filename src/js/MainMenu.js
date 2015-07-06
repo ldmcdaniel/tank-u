@@ -2,6 +2,8 @@ PhaserGame.MainMenu = function (game) {
   //create this.varName here for use in the prototype for the menu
 };
 
+var menuBackgroundMusic;
+
 PhaserGame.MainMenu.prototype = {
   create: function () {
 
@@ -14,6 +16,9 @@ PhaserGame.MainMenu.prototype = {
     this.sand = this.map.createLayer('Sand');
     this.grass = this.map.createLayer('Grass');
     this.titleTanks = this.map.createLayer('11Tanks');
+    this.menuBackgroundMusic = game.add.audio('menuBackgroundMusic');
+    this.menuBackgroundMusic.play();
+
 
     //use the variables using this.varName to add to the menu
 
@@ -26,6 +31,7 @@ PhaserGame.MainMenu.prototype = {
   },
 
   start: function () {
+    this.menuBackgroundMusic.stop();
 
     game.state.start('Game');
 

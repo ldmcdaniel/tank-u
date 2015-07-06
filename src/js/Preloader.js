@@ -29,6 +29,8 @@ PhaserGame.Preloader.prototype = {
 
     this.load.spritesheet('explosion', 'assets/explosion192.png', 192, 192);
     this.load.image('coin', 'assets/coin64.png');
+    this.load.audio('menuBackgroundMusic', 'assets/superhappycheesyloop1of2.wav');
+    this.load.audio('backgroundMusic', 'assets/superhappycheesyloop2of2.wav');
 
     var welcome = game.add.text(100, 100, 'coming...', {font: '30px Courier', fill: '#eeeeee'});
 

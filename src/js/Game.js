@@ -1,4 +1,4 @@
-var map, road, trees, turrets, test, bmd, marker, currentTile, enemies, waveCreator, enemyWave, turretPosition, mouseDownCount, bullets, enemy, explosions, coins, coinPosition;
+var map, road, trees, turrets, test, bmd, marker, currentTile, enemies, waveCreator, enemyWave, turretPosition, mouseDownCount, bullets, enemy, explosions, coins, coinPosition, score, waveNumber, startingMoney, startingWaveNumber, startingScore, backgroundMusic;
 var fireRate = 300;
 var nextFire0 = 0;
 var nextFire1 = 0;
@@ -10,6 +10,7 @@ var nextFire6 = 0;
 var nextFire7 = 0;
 var nextFire8 = 0;
 var nextFire9 = 0;
+var money = 40;
 
 
 
@@ -65,14 +66,15 @@ PhaserGame.Game.prototype = {
     this.bullets.setAll('checkWorldBounds', true);
     this.bullets.setAll('outOfBoundsKill', true);
 
-    /////////////////////
-    //     Turrets     //
-    /////////////////////
+    ///////////////////////////////
+    //     Turrets and Coins     //
+    ///////////////////////////////
 
     this.guns = game.add.group();
 
     this.turretPosition = ['turret1', 'turret1', 'turret1', 'turret1', 'turret1', 'turret1', 'turret1', 'turret1', 'turret1', 'turret1']
     this.coinPosition = ['coin', 'coin', 'coin', 'coin', 'coin', 'coin', 'coin', 'coin', 'coin', 'coin']
+
     this.turretSpots = {
       'x' : [352, 800, 256, 448, 96, 320, 128, 354, 832, 864],
       'y' : [32, 96, 256, 256, 320, 480, 640, 704, 384, 544]
@@ -81,7 +83,6 @@ PhaserGame.Game.prototype = {
     for (var i = 0; i < this.turretPosition.length; i++) {
       this.turretPosition[i] = this.guns.create(this.turretSpots.x[i], this.turretSpots.y[i], this.turretPosition[i]);
       this.turretPosition[i].anchor.set(0.5);
-      // this.turretPosition[i].kill();
       this.coinPosition[i] = game.add.button(this.turretSpots.x[i], this.turretSpots.y[i], this.coinPosition[i], this.createTurret);
       this.coinPosition[i].anchor.set(0.5);
     }
@@ -94,17 +95,7 @@ PhaserGame.Game.prototype = {
     explosions.createMultiple(20, 'explosion');
     // var exp = game.add.sprite(512, 384, 'explosion');
     // exp.animations.add('fire');
-    // exp.animations.play('fire', 10, false, true)
-
-    /////////////////////////////
-    //     Coins and score     //
-    /////////////////////////////
-
-    // for (var i = 0; i < this.turretPosition.length; i++) {
-    //   var c = game.add.button(this.turretSpots.x[i], this.turretSpots.y[i], 'coin', this.createTurret);
-    //   c.anchor.set(0.5);
-    // }
-
+    // exp.animations.play('fire', 10, false, true);
 
     ///////////////////////////////////////////////
     //      Add Bit Mad Data and Last Layer      //
@@ -115,6 +106,24 @@ PhaserGame.Game.prototype = {
     this.plot();
 
     this.bridges = this.map.createLayer('Tree Tops and Bridges');
+
+    ////////////////////////////////////////////////////
+    //     Texts for Score, Money, and Wave Count     //
+    ////////////////////////////////////////////////////
+
+    startingMoney = 40;
+    startingScore = 0;
+    startingWaveNumber = 1;
+    score = game.add.text(820, 10, 'Score:');
+    money = game.add.text(412, 10, "$ 40");
+    waveNumber = game.add.text(30, 10, 'Wave 1')
+
+    /////////////////////////////////////
+    //     Music and Sound Effects     //
+    /////////////////////////////////////
+
+    this.backgroundMusic = game.add.audio('backgroundMusic', true);
+    this.backgroundMusic.play();
 
   },
 
@@ -172,9 +181,9 @@ PhaserGame.Game.prototype = {
     };
 
     this.pi++;
-    if (this.pi >= this.path.length) {
-      this.pi = 0;
-    }
+    // if (this.pi >= this.path.length) {
+    //   this.pi = 0;
+    // }
 
     for (var i = 0; i < this.enemyWave.length; i++) {
       for (var j = 0; j < this.turretPosition.length; j++) {
@@ -184,13 +193,16 @@ PhaserGame.Game.prototype = {
       }
     }
 
+    ///////////////////////////////////////
+    //     Coin kill for turret fire     //
+    ///////////////////////////////////////
+
     if (this.coinPosition[0].alive === false) {
       this.fire0();
     }
     if (this.coinPosition[1].alive === false) {
       this.fire1();
     }
-
     if (this.coinPosition[2].alive === false) {
       this.fire2();
     }
@@ -226,9 +238,8 @@ PhaserGame.Game.prototype = {
     game.physics.arcade.overlap(this.bullets, this.enemies, this.collisionHandler);
   },
 
-  createTurret: function (coin, gun) {
+  createTurret: function (coin) {
     coin.kill()
-
   },
 
   collisionHandler: function (bullet, enemy) {
@@ -250,7 +261,7 @@ PhaserGame.Game.prototype = {
       bullet.anchor.set(0.5);
       bullet.reset(this.turretPosition[0].x, this.turretPosition[0].y);
       for (var i = 0; i < this.enemyWave.length; i++) {
-        if (this.physics.arcade.distanceToXY(this.enemyWave[i], this.turretPosition[0].x, this.turretPosition[0].y) < 200 && this.enemyWave[i].alive === true && this.enemyWave[i].x > 0 && this.enemyWave[i].y < 768) {
+        if (this.physics.arcade.distanceToXY(this.enemyWave[i], this.turretPosition[0].x, this.turretPosition[0].y) < 200 && this.enemyWave[i].x > 0 && this.enemyWave[i].y < 768) {
           bullet.rotation = game.physics.arcade.angleBetween(this.turretPosition[0], this.enemyWave[i]);
           game.physics.arcade.moveToObject(bullet, this.enemyWave[i], 300)
         }
