@@ -1,4 +1,4 @@
-var map, road, trees, turrets, test, bmd, marker, currentTile, enemies, waveCreator, enemyWave, turretPosition, mouseDownCount, bullets, enemy, explosions, coins, coinPosition, score, waveNumber, startingMoney, startingWaveNumber, startingScore, backgroundMusic;
+var map, road, trees, turrets, test, bmd, marker, currentTile, enemies, waveCreator, enemyWave, turretPosition, mouseDownCount, bullets, enemy, explosions, coins, coinPosition, score, waveNumber, startingMoney, startingWaveNumber, startingScore, backgroundMusic, explosionSound;
 var fireRate = 300;
 var nextFire0 = 0;
 var nextFire1 = 0;
@@ -114,7 +114,7 @@ PhaserGame.Game.prototype = {
     startingWaveNumber = 1;
     score = game.add.text(820, 10, 'Score:');
     money = game.add.text(412, 10, "$ 40");
-    waveNumber = game.add.text(30, 10, 'Wave 1')
+    waveNumber = game.add.text(30, 10, 'Wave 1');
 
     /////////////////////////////////////
     //     Music and Sound Effects     //
@@ -176,10 +176,8 @@ PhaserGame.Game.prototype = {
       var offset = this.path[this.pi + ((this.enemyWave.length - 1) * 40 - i * 40)];
       if (this.enemyWave[8].x !== 860) {
         this.enemyWave[i].x = offset.x;
-        console.log(this.enemyWave[i].x);
         this.enemyWave[i].y = offset.y;
         this.enemyWave[i].rotation = offset.angle;
-
       }
     };
 
@@ -241,18 +239,17 @@ PhaserGame.Game.prototype = {
 
     game.physics.arcade.overlap(this.bullets, this.enemies, this.collisionHandler);
 
-    // game.physics.arcade.this.coinPosition[0].click(this.playCashRegister);
-
   },
 
   playCashRegister: function () {
     console.log("works")
-    // this.cashRegister = game.add.audio('cashRegister');
-    // this.cashRegister.play();
+
   },
 
   createTurret: function (coin) {
     coin.kill()
+    this.cashRegister = game.add.audio('cashRegister');
+    this.cashRegister.play();
   },
 
   collisionHandler: function (bullet, enemy) {
@@ -260,11 +257,13 @@ PhaserGame.Game.prototype = {
     // console.log(enemy.health);
     enemy.health -= 1;
     if(enemy.health <= 0) {
+      this.explosionSound = game.add.audio('explosion');
+      this.explosionSound.play();
       enemy.kill();
       var explosion = explosions.getFirstExists(false);
       explosion.reset(enemy.body.x - 70, enemy.body.y - 70);
       explosion.animations.add('explosion');
-      explosion.animations.play('explosion')
+      explosion.animations.play('explosion');
     }
   },
 
@@ -277,7 +276,9 @@ PhaserGame.Game.prototype = {
       for (var i = 0; i < this.enemyWave.length; i++) {
         if (this.physics.arcade.distanceToXY(this.enemyWave[i], this.turretPosition[0].x, this.turretPosition[0].y) < 200 && this.enemyWave[i].x > 0 && this.enemyWave[i].y < 768) {
           bullet.rotation = game.physics.arcade.angleBetween(this.turretPosition[0], this.enemyWave[i]);
-          game.physics.arcade.moveToObject(bullet, this.enemyWave[i], 300)
+          game.physics.arcade.moveToObject(bullet, this.enemyWave[i], 300);
+          var shot = game.add.audio('shot');
+          shot.play();
         }
       }
     }
@@ -291,7 +292,9 @@ PhaserGame.Game.prototype = {
       for (var i = 0; i < this.enemyWave.length; i++) {
         if (this.physics.arcade.distanceToXY(this.enemyWave[i], this.turretPosition[1].x, this.turretPosition[1].y) < 200 && this.enemyWave[i].alive === true && this.enemyWave[i].x > 0 && this.enemyWave[i].y < 768) {
           bullet.rotation = game.physics.arcade.angleBetween(this.turretPosition[1], this.enemyWave[i])
-          game.physics.arcade.moveToObject(bullet, this.enemyWave[i], 300)
+          game.physics.arcade.moveToObject(bullet, this.enemyWave[i], 300);
+          var shot = game.add.audio('shot');
+          shot.play();
         }
       }
     }
@@ -305,7 +308,9 @@ PhaserGame.Game.prototype = {
       for (var i = 0; i < this.enemyWave.length; i++) {
         if (this.physics.arcade.distanceToXY(this.enemyWave[i], this.turretPosition[2].x, this.turretPosition[2].y) < 200 && this.enemyWave[i].alive === true && this.enemyWave[i].x > 0 && this.enemyWave[i].y < 768) {
           bullet.rotation = game.physics.arcade.angleBetween(this.turretPosition[2], this.enemyWave[i])
-          game.physics.arcade.moveToObject(bullet, this.enemyWave[i], 300)
+          game.physics.arcade.moveToObject(bullet, this.enemyWave[i], 300);
+          var shot = game.add.audio('shot');
+          shot.play();
         }
       }
     }
@@ -319,7 +324,9 @@ PhaserGame.Game.prototype = {
       for (var i = 0; i < this.enemyWave.length; i++) {
         if (this.physics.arcade.distanceToXY(this.enemyWave[i], this.turretPosition[3].x, this.turretPosition[3].y) < 200 && this.enemyWave[i].alive === true && this.enemyWave[i].x > 0 && this.enemyWave[i].y < 768) {
           bullet.rotation = game.physics.arcade.angleBetween(this.turretPosition[3], this.enemyWave[i])
-          game.physics.arcade.moveToObject(bullet, this.enemyWave[i], 300)
+          game.physics.arcade.moveToObject(bullet, this.enemyWave[i], 300);
+          var shot = game.add.audio('shot');
+          shot.play();
         }
       }
 
@@ -334,7 +341,9 @@ PhaserGame.Game.prototype = {
       for (var i = 0; i < this.enemyWave.length; i++) {
         if (this.physics.arcade.distanceToXY(this.enemyWave[i], this.turretPosition[4].x, this.turretPosition[4].y) < 200 && this.enemyWave[i].alive === true && this.enemyWave[i].x > 0 && this.enemyWave[i].y < 768) {
           bullet.rotation = game.physics.arcade.angleBetween(this.turretPosition[4], this.enemyWave[i])
-          game.physics.arcade.moveToObject(bullet, this.enemyWave[i], 300)
+          game.physics.arcade.moveToObject(bullet, this.enemyWave[i], 300);
+          var shot = game.add.audio('shot');
+          shot.play();
         }
       }
     }
@@ -348,7 +357,9 @@ PhaserGame.Game.prototype = {
       for (var i = 0; i < this.enemyWave.length; i++) {
         if (this.physics.arcade.distanceToXY(this.enemyWave[i], this.turretPosition[5].x, this.turretPosition[5].y) < 200 && this.enemyWave[i].alive === true && this.enemyWave[i].x > 0 && this.enemyWave[i].y < 768) {
           bullet.rotation = game.physics.arcade.angleBetween(this.turretPosition[5], this.enemyWave[i])
-          game.physics.arcade.moveToObject(bullet, this.enemyWave[i], 300)
+          game.physics.arcade.moveToObject(bullet, this.enemyWave[i], 300);
+          var shot = game.add.audio('shot');
+          shot.play();
         }
       }
     }
@@ -362,7 +373,9 @@ PhaserGame.Game.prototype = {
       for (var i = 0; i < this.enemyWave.length; i++) {
         if (this.physics.arcade.distanceToXY(this.enemyWave[i], this.turretPosition[6].x, this.turretPosition[6].y) < 200 && this.enemyWave[i].alive === true && this.enemyWave[i].x > 0 && this.enemyWave[i].y < 768) {
           bullet.rotation = game.physics.arcade.angleBetween(this.turretPosition[6], this.enemyWave[i])
-          game.physics.arcade.moveToObject(bullet, this.enemyWave[i], 300)
+          game.physics.arcade.moveToObject(bullet, this.enemyWave[i], 300);
+          var shot = game.add.audio('shot');
+          shot.play();
         }
       }
     }
@@ -376,7 +389,9 @@ PhaserGame.Game.prototype = {
       for (var i = 0; i < this.enemyWave.length; i++) {
         if (this.physics.arcade.distanceToXY(this.enemyWave[i], this.turretPosition[7].x, this.turretPosition[7].y) < 200 && this.enemyWave[i].alive === true && this.enemyWave[i].x > 0 && this.enemyWave[i].y < 768) {
           bullet.rotation = game.physics.arcade.angleBetween(this.turretPosition[7], this.enemyWave[i])
-          game.physics.arcade.moveToObject(bullet, this.enemyWave[i], 300)
+          game.physics.arcade.moveToObject(bullet, this.enemyWave[i], 300);
+          var shot = game.add.audio('shot');
+          shot.play();
         }
       }
     }
@@ -390,7 +405,9 @@ PhaserGame.Game.prototype = {
       for (var i = 0; i < this.enemyWave.length; i++) {
         if (this.physics.arcade.distanceToXY(this.enemyWave[i], this.turretPosition[8].x, this.turretPosition[8].y) < 200 && this.enemyWave[i].alive === true && this.enemyWave[i].x > 0 && this.enemyWave[i].y < 768) {
           bullet.rotation = game.physics.arcade.angleBetween(this.turretPosition[8], this.enemyWave[i])
-          game.physics.arcade.moveToObject(bullet, this.enemyWave[i], 300)
+          game.physics.arcade.moveToObject(bullet, this.enemyWave[i], 300);
+          var shot = game.add.audio('shot');
+          shot.play();
         }
       }
     }
@@ -404,7 +421,9 @@ PhaserGame.Game.prototype = {
       for (var i = 0; i < this.enemyWave.length; i++) {
         if (this.physics.arcade.distanceToXY(this.enemyWave[i], this.turretPosition[9].x, this.turretPosition[9].y) < 200 && this.enemyWave[i].alive === true && this.enemyWave[i].x > 0 && this.enemyWave[i].y < 768) {
           bullet.rotation = game.physics.arcade.angleBetween(this.turretPosition[9], this.enemyWave[i])
-          game.physics.arcade.moveToObject(bullet, this.enemyWave[i], 300)
+          game.physics.arcade.moveToObject(bullet, this.enemyWave[i], 300);
+          var shot = game.add.audio('shot');
+          shot.play();
         }
       }
     }

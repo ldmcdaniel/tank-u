@@ -31,7 +31,9 @@ PhaserGame.Preloader.prototype = {
     this.load.image('coin', 'assets/coin64.png');
     this.load.audio('menuBackgroundMusic', 'assets/superhappycheesyloop1of2.wav');
     this.load.audio('backgroundMusic', 'assets/superhappycheesyloop2of2.wav');
-    this.load.audio('cashRegister', 'assets/cash-register')
+    this.load.audio('cashRegister', 'assets/cash-register.mp3');
+    this.load.audio('explosion', 'assets/explosion.wav');
+    this.load.audio('shot', 'assets/gun-shot.wav');
 
     var welcome = game.add.text(100, 100, 'coming...', {font: '30px Courier', fill: '#eeeeee'});
 
