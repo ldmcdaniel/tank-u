@@ -75,6 +75,7 @@ PhaserGame.Game.prototype = {
     this.turretPosition = ['turret1', 'turret1', 'turret1', 'turret1', 'turret1', 'turret1', 'turret1', 'turret1', 'turret1', 'turret1']
     this.coinPosition = ['coin', 'coin', 'coin', 'coin', 'coin', 'coin', 'coin', 'coin', 'coin', 'coin']
 
+
     this.turretSpots = {
       'x' : [352, 800, 256, 448, 96, 320, 128, 354, 832, 864],
       'y' : [32, 96, 256, 256, 320, 480, 640, 704, 384, 544]
@@ -93,9 +94,6 @@ PhaserGame.Game.prototype = {
 
     explosions = game.add.group();
     explosions.createMultiple(20, 'explosion');
-    // var exp = game.add.sprite(512, 384, 'explosion');
-    // exp.animations.add('fire');
-    // exp.animations.play('fire', 10, false, true);
 
     ///////////////////////////////////////////////
     //      Add Bit Mad Data and Last Layer      //
@@ -173,12 +171,18 @@ PhaserGame.Game.prototype = {
     //     Places enemy tanks into the wave     //
     //////////////////////////////////////////////
 
+
     for (var i = 0; i < this.enemyWave.length; i++) {
       var offset = this.path[this.pi + ((this.enemyWave.length - 1) * 40 - i * 40)];
-      this.enemyWave[i].x = offset.x;
-      this.enemyWave[i].y = offset.y;
-      this.enemyWave[i].rotation = offset.angle;
+      if (this.enemyWave[8].x !== 860) {
+        this.enemyWave[i].x = offset.x;
+        console.log(this.enemyWave[i].x);
+        this.enemyWave[i].y = offset.y;
+        this.enemyWave[i].rotation = offset.angle;
+
+      }
     };
+
 
     this.pi++;
     // if (this.pi >= this.path.length) {
@@ -236,6 +240,15 @@ PhaserGame.Game.prototype = {
     }
 
     game.physics.arcade.overlap(this.bullets, this.enemies, this.collisionHandler);
+
+    // game.physics.arcade.this.coinPosition[0].click(this.playCashRegister);
+
+  },
+
+  playCashRegister: function () {
+    console.log("works")
+    // this.cashRegister = game.add.audio('cashRegister');
+    // this.cashRegister.play();
   },
 
   createTurret: function (coin) {
@@ -244,13 +257,14 @@ PhaserGame.Game.prototype = {
 
   collisionHandler: function (bullet, enemy) {
     bullet.kill();
-    console.log(enemy.health);
+    // console.log(enemy.health);
     enemy.health -= 1;
     if(enemy.health <= 0) {
       enemy.kill();
       var explosion = explosions.getFirstExists(false);
       explosion.reset(enemy.body.x - 70, enemy.body.y - 70);
-      explosion.play('explosion', 15, 15, false, true);
+      explosion.animations.add('explosion');
+      explosion.animations.play('explosion')
     }
   },
 
