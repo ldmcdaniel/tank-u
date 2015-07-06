@@ -50,7 +50,7 @@ PhaserGame.Game.prototype = {
       this.enemyWave[i] = this.enemies.create(-16, 116, this.enemyWave[i]);
       this.enemyWave[i].anchor.set(0.5);
       this.enemyWave[i].animations.add('explosion', false);
-      this.enemyWave[i].health = 30;
+      this.enemyWave[i].health = 10;
     }
 
     ///////////////////////
@@ -184,23 +184,50 @@ PhaserGame.Game.prototype = {
       }
     }
 
-    this.fire0();
-    this.fire1();
-    this.fire2();
-    this.fire3();
-    this.fire4();
-    this.fire5();
-    this.fire6();
-    this.fire7();
-    this.fire8();
-    this.fire9();
+    if (this.coinPosition[0].alive === false) {
+      this.fire0();
+    }
+    if (this.coinPosition[1].alive === false) {
+      this.fire1();
+    }
+
+    if (this.coinPosition[2].alive === false) {
+      this.fire2();
+    }
+
+    if (this.coinPosition[3].alive === false) {
+      this.fire3();
+    }
+
+    if (this.coinPosition[4].alive === false) {
+      this.fire4();
+    }
+
+    if (this.coinPosition[5].alive === false) {
+      this.fire5();
+    }
+
+    if (this.coinPosition[6].alive === false) {
+      this.fire6();
+    }
+
+    if (this.coinPosition[7].alive === false) {
+      this.fire7();
+    }
+
+    if (this.coinPosition[8].alive === false) {
+      this.fire8();
+    }
+
+    if (this.coinPosition[9].alive === false) {
+      this.fire9();
+    }
 
     game.physics.arcade.overlap(this.bullets, this.enemies, this.collisionHandler);
   },
 
   createTurret: function (coin, gun) {
     coin.kill()
-    // var abc = this.guns.create(coin.x, coin.y, 'turret1');
 
   },
 
