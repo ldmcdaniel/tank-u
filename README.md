@@ -8,4 +8,5 @@ Version 1.0 includes has working independent towers on click with tanks that hav
   Working tokens to purchase and upgrade turrets with different options.
   Upgrades to turrets with greater range, increased damage, varying bullet speeds and sound effects.
   Convert all .wav files to .mp3.
+  Clean files and lint code to maximize efficiency.
   An endgame state.
