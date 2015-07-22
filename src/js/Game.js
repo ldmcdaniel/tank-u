@@ -193,43 +193,10 @@ PhaserGame.Game.prototype = {
     ///////////////////////////////////////
     //     Coin kill for turret fire     //
     ///////////////////////////////////////
-
-    if (this.coinPosition[0].alive === false) {
-      this.fire0();
-    }
-    if (this.coinPosition[1].alive === false) {
-      this.fire1();
-    }
-    if (this.coinPosition[2].alive === false) {
-      this.fire2();
-    }
-
-    if (this.coinPosition[3].alive === false) {
-      this.fire3();
-    }
-
-    if (this.coinPosition[4].alive === false) {
-      this.fire4();
-    }
-
-    if (this.coinPosition[5].alive === false) {
-      this.fire5();
-    }
-
-    if (this.coinPosition[6].alive === false) {
-      this.fire6();
-    }
-
-    if (this.coinPosition[7].alive === false) {
-      this.fire7();
-    }
-
-    if (this.coinPosition[8].alive === false) {
-      this.fire8();
-    }
-
-    if (this.coinPosition[9].alive === false) {
-      this.fire9();
+    for (var y = 0; y < 10; y++) {
+      if (this.coinPosition[y].alive === false) {
+        this.aim(y);
+      }
     }
 
     game.physics.arcade.overlap(this.bullets, this.enemies, this.collisionHandler);
@@ -261,88 +228,22 @@ PhaserGame.Game.prototype = {
       explosion.animations.play('explosion');
     }
   },
-  aim: function (turr) {
-    var bullet = this.bullets.getFirstDead();
-    bullet.anchor.set(0.5);
-    bullet.reset(turr.x, turr.y);
-    for (var i = 0; i < this.enemyWave.length; i++) {
-      var enem = this.enemyWave[i];
-      if (this.physics.arcade.distanceToXY(enem, turr.x, turr.y) < 200 && enem.alive === true && enem.x > 0 && enem.y < 768) {
-        bullet.rotation = game.physics.arcade.angleBetween(turr, enem)
-        game.physics.arcade.moveToObject(bullet, enem, 300);
-        var shot = game.add.audio('shot');
-        shot.play();
+  aim: function (x) {
+    var turr = this.turretPosition[x];
+    if (game.time.now > nextFire[x] && this.bullets.countDead() > 0) {
+      nextFire[x] = game.time.now + fireRate;
+      var bullet = this.bullets.getFirstDead();
+      bullet.anchor.set(0.5);
+      bullet.reset(turr.x, turr.y);
+      for (var i = 0; i < this.enemyWave.length; i++) {
+        var enem = this.enemyWave[i];
+        if (this.physics.arcade.distanceToXY(enem, turr.x, turr.y) < 200 && enem.alive === true && enem.x > 0 && enem.y < 768) {
+          bullet.rotation = game.physics.arcade.angleBetween(turr, enem)
+          game.physics.arcade.moveToObject(bullet, enem, 300);
+          var shot = game.add.audio('shot');
+          shot.play();
+        }
       }
-    }
-  },
-  fire0: function () {
-    var turr = this.turretPosition[0];
-    if (game.time.now > nextFire[0] && this.bullets.countDead() > 0) {
-      nextFire[0] = game.time.now + fireRate;
-      this.aim(turr);
-    }
-  },
-  fire1: function () {
-    var turr = this.turretPosition[1];
-    if (game.time.now > nextFire[1] && this.bullets.countDead() > 0) {
-      nextFire[1] = game.time.now + fireRate;
-      this.aim(turr);
-    }
-  },
-  fire2: function () {
-    var turr = this.turretPosition[2];
-    if (game.time.now > nextFire[2] && this.bullets.countDead() > 0) {
-      nextFire[2] = game.time.now + fireRate;
-      this.aim(turr);
-    }
-  },
-  fire3: function () {
-    var turr = this.turretPosition[3];
-    if (game.time.now > nextFire[3] && this.bullets.countDead() > 0) {
-      nextFire[3] = game.time.now + fireRate;
-      this.aim(turr);
-    }
-  },
-  fire4: function () {
-    var turr = this.turretPosition[4];
-    if (game.time.now > nextFire[4] && this.bullets.countDead() > 0) {
-      nextFire[4] = game.time.now + fireRate;
-      this.aim(turr);
-    }
-  },
-  fire5: function () {
-    var turr = this.turretPosition[5];
-    if (game.time.now > nextFire[5] && this.bullets.countDead() > 0) {
-      nextFire[5] = game.time.now + fireRate;
-      this.aim(turr);
-    }
-  },
-  fire6: function () {
-    var turr = this.turretPosition[6];
-    if (game.time.now > nextFire[6] && this.bullets.countDead() > 0) {
-      nextFire[6] = game.time.now + fireRate;
-      this.aim(turr);
-    }
-  },
-  fire7: function () {
-    var turr = this.turretPosition[7];
-    if (game.time.now > nextFire[7] && this.bullets.countDead() > 0) {
-      nextFire[7] = game.time.now + fireRate;
-      this.aim(turr);
-    }
-  },
-  fire8: function () {
-    var turr = this.turretPosition[8];
-    if (game.time.now > nextFire[8] && this.bullets.countDead() > 0) {
-      nextFire[8] = game.time.now + fireRate;
-      this.aim(turr);
-    }
-  },
-  fire9: function () {
-     var turr = this.turretPosition[9];
-    if (game.time.now > nextFire[9] && this.bullets.countDead() > 0) {
-      nextFire[9] = game.time.now + fireRate;
-      this.aim(turr);
     }
   },
   render: function () {
