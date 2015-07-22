@@ -1,13 +1,11 @@
-var map, road, trees, turrets, test, bmd, marker, currentTile, enemies, waveCreator, enemyWave, turretPosition, mouseDownCount, bullets, enemy, explosions, coins, coinPosition, score, waveNumber, startingMoney, startingWaveNumber, startingScore, backgroundMusic, explosionSound;
+var explosions, score, waveNumber, startingMoney, startingWaveNumber, startingScore;
+
 var fireRate = 300;
 var nextFire = [];
 for(var i = 0; i < 10; i++) {
   nextFire[i] = 0;
 }
-var fire = [];
 var money = 40;
-
-
 
 PhaserGame.Game = function (game) {
   // this.weapons = [];
@@ -21,15 +19,15 @@ PhaserGame.Game.prototype = {
     //      Map and Layers Creation      //
     ///////////////////////////////////////
 
-    $.map = this.add.tilemap('map');
+    var map = this.add.tilemap('map');
 
       //First param :name of tileset from tiled; second: game.load.image
-    $.map.addTilesetImage('terrain_atlas', 'terrain');
-    $.map.addTilesetImage('turrets32', 'turrets');
+    map.addTilesetImage('terrain_atlas', 'terrain');
+    map.addTilesetImage('turrets32', 'turrets');
 
-    $.road = $.map.createLayer('Road');
-    $.grass = $.map.createLayer('Grass');
-    $.trees = $.map.createLayer('Tree bases');
+    $.road = map.createLayer('Road');
+    $.grass = map.createLayer('Grass');
+    $.trees = map.createLayer('Tree bases');
 
     ////////////////////////////////////////////////////////
     //      Enemy sprite and travel path information      //
@@ -99,7 +97,7 @@ PhaserGame.Game.prototype = {
     $.bmd.addToWorld();
     $.plot();
 
-    $.bridges = $.map.createLayer('Tree Tops and Bridges');
+    $.bridges = map.createLayer('Tree Tops and Bridges');
 
     ////////////////////////////////////////////////////
     //     Texts for Score, Money, and Wave Count     //
