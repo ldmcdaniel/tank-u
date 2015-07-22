@@ -14,73 +14,74 @@ PhaserGame.Game = function (game) {
 }
 
 PhaserGame.Game.prototype = {
+    create: function () {
+      var $ = this;
 
-  create: function () {
     ///////////////////////////////////////
     //      Map and Layers Creation      //
     ///////////////////////////////////////
 
-    this.map = this.add.tilemap('map');
+    $.map = this.add.tilemap('map');
 
       //First param :name of tileset from tiled; second: game.load.image
-    this.map.addTilesetImage('terrain_atlas', 'terrain');
-    this.map.addTilesetImage('turrets32', 'turrets');
+    $.map.addTilesetImage('terrain_atlas', 'terrain');
+    $.map.addTilesetImage('turrets32', 'turrets');
 
-    this.road = this.map.createLayer('Road');
-    this.grass = this.map.createLayer('Grass');
-    this.trees = this.map.createLayer('Tree bases');
+    $.road = $.map.createLayer('Road');
+    $.grass = $.map.createLayer('Grass');
+    $.trees = $.map.createLayer('Tree bases');
 
     ////////////////////////////////////////////////////////
     //      Enemy sprite and travel path information      //
     ////////////////////////////////////////////////////////
 
-    this.enemies = game.add.group();
-    this.enemies.hp = 3;
-    this.enemies.enableBody = true;
-    this.enemies.physicsBodyType = Phaser.Physics.ARCADE;
+    $.enemies = game.add.group();
+    $.enemies.hp = 3;
+    $.enemies.enableBody = true;
+    $.enemies.physicsBodyType = Phaser.Physics.ARCADE;
 
-    this.enemyWave = ['tank1', 'tank2', 'tank3', 'tank4', 'tank5', 'tank6', 'tank7', 'tank8', 'tank9'];
+    $.enemyWave = ['tank1', 'tank2', 'tank3', 'tank4', 'tank5', 'tank6', 'tank7', 'tank8', 'tank9'];
 
 
-    for (var i = 0; i < this.enemyWave.length; i++) {
-      this.enemyWave[i] = this.enemies.create(-16, 116, this.enemyWave[i]);
-      this.enemyWave[i].anchor.set(0.5);
-      this.enemyWave[i].animations.add('explosion', false);
-      this.enemyWave[i].health = 10;
+    for (var i = 0; i < $.enemyWave.length; i++) {
+      $.enemyWave[i] = $.enemies.create(-16, 116, $.enemyWave[i]);
+      $.enemyWave[i].anchor.set(0.5);
+      $.enemyWave[i].animations.add('explosion', false);
+      $.enemyWave[i].health = 10;
     }
 
     ///////////////////////
     //      Bullets      //
     ///////////////////////
 
-    this.bullets = game.add.group();
+    $.bullets = game.add.group();
 
-    this.bullets.enableBody = true;
-    this.bullets.physicsBodyType = Phaser.Physics.ARCADE;
-    this.bullets.createMultiple(500, 'bullet1');
-    this.bullets.setAll('checkWorldBounds', true);
-    this.bullets.setAll('outOfBoundsKill', true);
+    $.bullets.enableBody = true;
+    $.bullets.physicsBodyType = Phaser.Physics.ARCADE;
+    $.bullets.createMultiple(500, 'bullet1');
+    $.bullets.setAll('checkWorldBounds', true);
+    $.bullets.setAll('outOfBoundsKill', true);
 
     ///////////////////////////////
     //     Turrets and Coins     //
     ///////////////////////////////
 
-    this.guns = game.add.group();
+    $.guns = game.add.group();
 
-    this.turretPosition = ['turret1', 'turret1', 'turret1', 'turret1', 'turret1', 'turret1', 'turret1', 'turret1', 'turret1', 'turret1']
-    this.coinPosition = ['coin', 'coin', 'coin', 'coin', 'coin', 'coin', 'coin', 'coin', 'coin', 'coin']
+    $.turretPosition = ['turret1', 'turret1', 'turret1', 'turret1', 'turret1', 'turret1', 'turret1', 'turret1', 'turret1', 'turret1']
+    $.coinPosition = ['coin', 'coin', 'coin', 'coin', 'coin', 'coin', 'coin', 'coin', 'coin', 'coin']
 
 
-    this.turretSpots = {
+    $.turretSpots = {
       'x' : [352, 800, 256, 448, 96, 320, 128, 354, 832, 864],
       'y' : [32, 96, 256, 256, 320, 480, 640, 704, 384, 544]
     }
 
     for (var i = 0; i < this.turretPosition.length; i++) {
-      this.turretPosition[i] = this.guns.create(this.turretSpots.x[i], this.turretSpots.y[i], this.turretPosition[i]);
-      this.turretPosition[i].anchor.set(0.5);
-      this.coinPosition[i] = game.add.button(this.turretSpots.x[i], this.turretSpots.y[i], this.coinPosition[i], this.createTurret);
-      this.coinPosition[i].anchor.set(0.5);
+      $.turretPosition[i] = $.guns.create($.turretSpots.x[i], $.turretSpots.y[i], $.turretPosition[i]);
+      $.turretPosition[i].anchor.set(0.5);
+      $.coinPosition[i] = game.add.button($.turretSpots.x[i], $.turretSpots.y[i], $.coinPosition[i], $.createTurret);
+      $.coinPosition[i].anchor.set(0.5);
     }
 
     /////////////////////////////////
@@ -94,11 +95,11 @@ PhaserGame.Game.prototype = {
     //      Add Bit Mad Data and Last Layer      //
     ///////////////////////////////////////////////
 
-    this.bmd = this.add.bitmapData(game.width, game.height);
-    this.bmd.addToWorld();
-    this.plot();
+    $.bmd = $.add.bitmapData(game.width, game.height);
+    $.bmd.addToWorld();
+    $.plot();
 
-    this.bridges = this.map.createLayer('Tree Tops and Bridges');
+    $.bridges = $.map.createLayer('Tree Tops and Bridges');
 
     ////////////////////////////////////////////////////
     //     Texts for Score, Money, and Wave Count     //
@@ -115,40 +116,42 @@ PhaserGame.Game.prototype = {
     //     Music and Sound Effects     //
     /////////////////////////////////////
 
-    this.backgroundMusic = game.add.audio('backgroundMusic', true);
-    this.backgroundMusic.play();
+    $.backgroundMusic = game.add.audio('backgroundMusic', true);
+    $.backgroundMusic.play();
 
   },
 
   plot: function () {
+    var $ = this;
+
     ////////////////////////////////////////////////////
     //      Path plot info for the enemy sprites      //
     ////////////////////////////////////////////////////
 
-    this.path = [];
+    $.path = [];
     var ix = 0;
-    var x = 1 / (game.width + (this.enemyWave.length - 1) * 100);
+    var x = 1 / (game.width + ($.enemyWave.length - 1) * 100);
 
-    this.points= {
+    $.points= {
       'x': [-466, -416, -366, -316, -266, -216, -156, -56, -16, 100, 200, 300, 400, 500, 600, 700, 740, 675, 600, 500, 400, 300, 205, 180, 190, 290, 390, 490, 590, 690, 790, 850, 860, 860, 860, 860, 860, 860, 860, 860, 860, 860],
       'y': [130, 130, 130, 130, 130, 130, 130, 130, 130, 130, 130, 130, 130, 145, 160, 180, 250, 310, 340, 350, 350, 365, 400, 475, 550, 590, 610, 623, 630, 638, 650, 720, 800, 850, 900, 950, 1000, 1050, 1100, 1150, 1200, 1250]
     };
 
-    this.pi = 0;
+    $.pi = 0;
 
     for (var i = 0; i <= 1; i += x) {
 
-      var px = this.math.catmullRomInterpolation(this.points.x, i);
-      var py = this.math.catmullRomInterpolation(this.points.y, i);
+      var px = $.math.catmullRomInterpolation($.points.x, i);
+      var py = $.math.catmullRomInterpolation($.points.y, i);
 
       //This draws the path onto the screen to edit the path
       // this.bmd.rect(px, py, 1, 1, 'rgba(255, 255, 255, 1)');
 
       var node = {x: px, y: py, angle: 0};
       if (ix > 0) {
-        node.angle = this.math.angleBetweenPoints(this.path[ix - 1], node);
+        node.angle = $.math.angleBetweenPoints($.path[ix - 1], node);
       }
-      this.path.push(node);
+      $.path.push(node);
       ix++;
 
     }
@@ -161,31 +164,32 @@ PhaserGame.Game.prototype = {
   },
 
   update: function (){
+    var $ = this;
 
     //////////////////////////////////////////////
     //     Places enemy tanks into the wave     //
     //////////////////////////////////////////////
 
 
-    for (var i = 0; i < this.enemyWave.length; i++) {
-      var offset = this.path[this.pi + ((this.enemyWave.length - 1) * 40 - i * 40)];
-      if (this.enemyWave[8].x !== 860) {
-        this.enemyWave[i].x = offset.x;
-        this.enemyWave[i].y = offset.y;
-        this.enemyWave[i].rotation = offset.angle;
+    for (var i = 0; i < $.enemyWave.length; i++) {
+      var offset = $.path[$.pi + (($.enemyWave.length - 1) * 40 - i * 40)];
+      if ($.enemyWave[8].x !== 860) {
+        $.enemyWave[i].x = offset.x;
+        $.enemyWave[i].y = offset.y;
+        $.enemyWave[i].rotation = offset.angle;
       }
     };
 
 
-    this.pi++;
+    $.pi++;
     // if (this.pi >= this.path.length) {
     //   this.pi = 0;
     // }
 
-    for (var i = 0; i < this.enemyWave.length; i++) {
-      for (var j = 0; j < this.turretPosition.length; j++) {
-        if (this.physics.arcade.distanceToXY(this.enemyWave[i], this.turretPosition[j].x, this.turretPosition[j].y) < 200 && this.enemyWave[i].alive === true) {
-          this.turretPosition[j].rotation = game.physics.arcade.angleBetween(this.turretPosition[j], this.enemyWave[i]);
+    for (var i = 0; i < $.enemyWave.length; i++) {
+      for (var j = 0; j < $.turretPosition.length; j++) {
+        if ($.physics.arcade.distanceToXY($.enemyWave[i], $.turretPosition[j].x, $.turretPosition[j].y) < 200 && $.enemyWave[i].alive === true) {
+          $.turretPosition[j].rotation = game.physics.arcade.angleBetween($.turretPosition[j], $.enemyWave[i]);
         }
       }
     }
@@ -194,12 +198,12 @@ PhaserGame.Game.prototype = {
     //     Coin kill for turret fire     //
     ///////////////////////////////////////
     for (var y = 0; y < 10; y++) {
-      if (this.coinPosition[y].alive === false) {
-        this.aim(y);
+      if ($.coinPosition[y].alive === false) {
+        $.aim(y);
       }
     }
 
-    game.physics.arcade.overlap(this.bullets, this.enemies, this.collisionHandler);
+    game.physics.arcade.overlap($.bullets, $.enemies, $.collisionHandler);
 
   },
 
