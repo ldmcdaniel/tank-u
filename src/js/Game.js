@@ -12,8 +12,8 @@ PhaserGame.Game = function (game) {
 }
 
 PhaserGame.Game.prototype = {
-    create: function () {
-      var $ = this;
+  create: function () {
+    var $ = this;
 
     ///////////////////////////////////////
     //      Map and Layers Creation      //
@@ -116,7 +116,6 @@ PhaserGame.Game.prototype = {
 
     $.backgroundMusic = game.add.audio('backgroundMusic', true);
     $.backgroundMusic.play();
-
   },
 
   plot: function () {
@@ -206,8 +205,7 @@ PhaserGame.Game.prototype = {
   },
 
   playCashRegister: function () {
-    console.log("works")
-
+    console.log("works");
   },
 
   createTurret: function (coin) {
@@ -237,10 +235,11 @@ PhaserGame.Game.prototype = {
       var bullet = this.bullets.getFirstDead();
       bullet.anchor.set(0.5);
       bullet.reset(turr.x, turr.y);
+      //Try decrimenting the function to have it aim at the first turret
       for (var i = 0; i < this.enemyWave.length; i++) {
         var enem = this.enemyWave[i];
         if (this.physics.arcade.distanceToXY(enem, turr.x, turr.y) < 200 && enem.alive === true && enem.x > 0 && enem.y < 768) {
-          bullet.rotation = game.physics.arcade.angleBetween(turr, enem)
+          bullet.rotation = game.physics.arcade.angleBetween(turr, enem);
           game.physics.arcade.moveToObject(bullet, enem, 300);
           var shot = game.add.audio('shot');
           shot.play();
