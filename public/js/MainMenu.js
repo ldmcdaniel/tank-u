@@ -1,0 +1,48 @@
+'use strict';
+
+PhaserGame.MainMenu = function (game) {};
+
+var menuBackgroundMusic;
+
+PhaserGame.MainMenu.prototype = {
+  create: function create() {
+
+    this.map = this.add.tilemap('title');
+    this.map.addTilesetImage('terrain_atlas', 'terrain');
+    this.map.addTilesetImage('15_tank_set 68x68', 'tanks');
+
+    this.rock = this.map.createLayer('Rock');
+    this.fire = this.map.createLayer('Fire');
+    this.sand = this.map.createLayer('Sand');
+    this.grass = this.map.createLayer('Grass');
+    this.titleTanks = this.map.createLayer('11Tanks');
+    this.menuBackgroundMusic = game.add.audio('menuBackgroundMusic');
+    this.menuBackgroundMusic.play();
+
+    //use the variables using this.varName to add to the menu
+
+    // var titleLabel = game.add.text(100, 100, 'Saving the World', {font: '50px Arial', fill: '#eeeeee'});
+
+    // var startLabel = game.add.text(100, game.world.height-100, 'Press "w" to Begin', {font: '20px Arial', fill: '#eeeeee'});
+
+    game.input.onDown.addOnce(this.start, this);
+  },
+
+  start: function start() {
+    this.menuBackgroundMusic.stop();
+
+    game.state.start('Game');
+  },
+
+  update: function update() {},
+
+  resize: function resize() {}
+
+};
+
+game.state.add('MainMenu', PhaserGame.MainMenu);
+
+//create this.varName here for use in the prototype for the menu
+
+//Do some nice funky main menu effect here
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9qcy9NYWluTWVudS5qcyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiOztBQUFBLFVBQVUsQ0FBQyxRQUFRLEdBQUcsVUFBVSxJQUFJLEVBQUUsRUFFckMsQ0FBQzs7QUFFRixJQUFJLG1CQUFtQixDQUFDOztBQUV4QixVQUFVLENBQUMsUUFBUSxDQUFDLFNBQVMsR0FBRztBQUM5QixRQUFNLEVBQUUsa0JBQVk7O0FBRWxCLFFBQUksQ0FBQyxHQUFHLEdBQUcsSUFBSSxDQUFDLEdBQUcsQ0FBQyxPQUFPLENBQUMsT0FBTyxDQUFDLENBQUM7QUFDckMsUUFBSSxDQUFDLEdBQUcsQ0FBQyxlQUFlLENBQUMsZUFBZSxFQUFFLFNBQVMsQ0FBQyxDQUFDO0FBQ3JELFFBQUksQ0FBQyxHQUFHLENBQUMsZUFBZSxDQUFDLG1CQUFtQixFQUFFLE9BQU8sQ0FBQyxDQUFDOztBQUV2RCxRQUFJLENBQUMsSUFBSSxHQUFHLElBQUksQ0FBQyxHQUFHLENBQUMsV0FBVyxDQUFDLE1BQU0sQ0FBQyxDQUFDO0FBQ3pDLFFBQUksQ0FBQyxJQUFJLEdBQUcsSUFBSSxDQUFDLEdBQUcsQ0FBQyxXQUFXLENBQUMsTUFBTSxDQUFDLENBQUM7QUFDekMsUUFBSSxDQUFDLElBQUksR0FBRyxJQUFJLENBQUMsR0FBRyxDQUFDLFdBQVcsQ0FBQyxNQUFNLENBQUMsQ0FBQztBQUN6QyxRQUFJLENBQUMsS0FBSyxHQUFHLElBQUksQ0FBQyxHQUFHLENBQUMsV0FBVyxDQUFDLE9BQU8sQ0FBQyxDQUFDO0FBQzNDLFFBQUksQ0FBQyxVQUFVLEdBQUcsSUFBSSxDQUFDLEdBQUcsQ0FBQyxXQUFXLENBQUMsU0FBUyxDQUFDLENBQUM7QUFDbEQsUUFBSSxDQUFDLG1CQUFtQixHQUFHLElBQUksQ0FBQyxHQUFHLENBQUMsS0FBSyxDQUFDLHFCQUFxQixDQUFDLENBQUM7QUFDakUsUUFBSSxDQUFDLG1CQUFtQixDQUFDLElBQUksRUFBRSxDQUFDOzs7Ozs7OztBQVNoQyxRQUFJLENBQUMsS0FBSyxDQUFDLE1BQU0sQ0FBQyxPQUFPLENBQUMsSUFBSSxDQUFDLEtBQUssRUFBRSxJQUFJLENBQUMsQ0FBQztHQUU3Qzs7QUFFRCxPQUFLLEVBQUUsaUJBQVk7QUFDakIsUUFBSSxDQUFDLG1CQUFtQixDQUFDLElBQUksRUFBRSxDQUFDOztBQUVoQyxRQUFJLENBQUMsS0FBSyxDQUFDLEtBQUssQ0FBQyxNQUFNLENBQUMsQ0FBQztHQUUxQjs7QUFHRCxRQUFNLEVBQUUsa0JBQVksRUFJbkI7O0FBRUQsUUFBTSxFQUFFLGtCQUFZLEVBRW5COztDQUVGLENBQUM7O0FBRUYsSUFBSSxDQUFDLEtBQUssQ0FBQyxHQUFHLENBQUMsVUFBVSxFQUFFLFVBQVUsQ0FBQyxRQUFRLENBQUMsQ0FBQyIsImZpbGUiOiJzcmMvanMvTWFpbk1lbnUuanMiLCJzb3VyY2VzQ29udGVudCI6WyJQaGFzZXJHYW1lLk1haW5NZW51ID0gZnVuY3Rpb24gKGdhbWUpIHtcbiAgLy9jcmVhdGUgdGhpcy52YXJOYW1lIGhlcmUgZm9yIHVzZSBpbiB0aGUgcHJvdG90eXBlIGZvciB0aGUgbWVudVxufTtcblxudmFyIG1lbnVCYWNrZ3JvdW5kTXVzaWM7XG5cblBoYXNlckdhbWUuTWFpbk1lbnUucHJvdG90eXBlID0ge1xuICBjcmVhdGU6IGZ1bmN0aW9uICgpIHtcblxuICAgIHRoaXMubWFwID0gdGhpcy5hZGQudGlsZW1hcCgndGl0bGUnKTtcbiAgICB0aGlzLm1hcC5hZGRUaWxlc2V0SW1hZ2UoJ3RlcnJhaW5fYXRsYXMnLCAndGVycmFpbicpO1xuICAgIHRoaXMubWFwLmFkZFRpbGVzZXRJbWFnZSgnMTVfdGFua19zZXQgNjh4NjgnLCAndGFua3MnKTtcblxuICAgIHRoaXMucm9jayA9IHRoaXMubWFwLmNyZWF0ZUxheWVyKCdSb2NrJyk7XG4gICAgdGhpcy5maXJlID0gdGhpcy5tYXAuY3JlYXRlTGF5ZXIoJ0ZpcmUnKTtcbiAgICB0aGlzLnNhbmQgPSB0aGlzLm1hcC5jcmVhdGVMYXllcignU2FuZCcpO1xuICAgIHRoaXMuZ3Jhc3MgPSB0aGlzLm1hcC5jcmVhdGVMYXllcignR3Jhc3MnKTtcbiAgICB0aGlzLnRpdGxlVGFua3MgPSB0aGlzLm1hcC5jcmVhdGVMYXllcignMTFUYW5rcycpO1xuICAgIHRoaXMubWVudUJhY2tncm91bmRNdXNpYyA9IGdhbWUuYWRkLmF1ZGlvKCdtZW51QmFja2dyb3VuZE11c2ljJyk7XG4gICAgdGhpcy5tZW51QmFja2dyb3VuZE11c2ljLnBsYXkoKTtcblxuXG4gICAgLy91c2UgdGhlIHZhcmlhYmxlcyB1c2luZyB0aGlzLnZhck5hbWUgdG8gYWRkIHRvIHRoZSBtZW51XG5cbiAgICAvLyB2YXIgdGl0bGVMYWJlbCA9IGdhbWUuYWRkLnRleHQoMTAwLCAxMDAsICdTYXZpbmcgdGhlIFdvcmxkJywge2ZvbnQ6ICc1MHB4IEFyaWFsJywgZmlsbDogJyNlZWVlZWUnfSk7XG5cbiAgICAvLyB2YXIgc3RhcnRMYWJlbCA9IGdhbWUuYWRkLnRleHQoMTAwLCBnYW1lLndvcmxkLmhlaWdodC0xMDAsICdQcmVzcyBcIndcIiB0byBCZWdpbicsIHtmb250OiAnMjBweCBBcmlhbCcsIGZpbGw6ICcjZWVlZWVlJ30pO1xuXG4gICAgZ2FtZS5pbnB1dC5vbkRvd24uYWRkT25jZSh0aGlzLnN0YXJ0LCB0aGlzKTtcblxuICB9LFxuXG4gIHN0YXJ0OiBmdW5jdGlvbiAoKSB7XG4gICAgdGhpcy5tZW51QmFja2dyb3VuZE11c2ljLnN0b3AoKTtcblxuICAgIGdhbWUuc3RhdGUuc3RhcnQoJ0dhbWUnKTtcblxuICB9LFxuXG5cbiAgdXBkYXRlOiBmdW5jdGlvbiAoKSB7XG5cbiAgICAvL0RvIHNvbWUgbmljZSBmdW5reSBtYWluIG1lbnUgZWZmZWN0IGhlcmVcblxuICB9LFxuXG4gIHJlc2l6ZTogZnVuY3Rpb24gKCkge1xuXG4gIH1cblxufTtcblxuZ2FtZS5zdGF0ZS5hZGQoJ01haW5NZW51JywgUGhhc2VyR2FtZS5NYWluTWVudSk7XG4iXX0=
