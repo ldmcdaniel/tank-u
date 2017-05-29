@@ -1,21 +1,15 @@
-var game = new Phaser.Game(1024, 768, Phaser.AUTO, 'game');
-var PhaserGame = function (){
-};
+const game = new Phaser.Game(1024, 768, Phaser.AUTO, 'game');
+const PhaserGame = () => {};
 
-PhaserGame.Boot = function (game) {
-};
+PhaserGame.Boot = game => {};
 
 PhaserGame.Boot.prototype = {
-  init: function () {
-    this.input.maxPointers= 1;
-    // this.scale.scaleMode = Phaser.ScaleManager.RESIZE;
+  init() { this.input.maxPointers= 1; },
+  preload() { /*Load the assets needed for your preloader bootscreen here*/
   },
-  preload: function () {
-    //Load the assets needed for your preloader bootscreen here
-  },
-  create: function () {
+  create() {
     this.game.physics.startSystem(Phaser.Physics.ARCADE);
-    this.cursors = game.input.keyboard.createCursorKeys();
+    game.input.keyboard.createCursorKeys();
     this.state.start('Preloader');
     game.scale.fullScreenScaleMode = Phaser.ScaleManager.EXACT_FIT;
     game.scale.startFullScreen();
