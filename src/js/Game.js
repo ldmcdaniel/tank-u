@@ -4,32 +4,14 @@ for(let i = 0; i < 10; i++) {
   nextFire[i] = 0;
 }
 
-PhaserGame.Game = game => { /* this.weapons = [];*/ }
+PhaserGame.Game = game => { console.log('this: ', this);/* this.weapons = [];*/ }
 
 PhaserGame.Game.prototype = {
-  create() {
-    const map = this.add.tilemap('map');
-    // First param :name of tileset from tiled; second: game.load.image
-    map.addTilesetImage('terrain_atlas', 'terrain');
-    map.addTilesetImage('turrets32', 'turrets');
-    map.createLayer('Road');
-    map.createLayer('Grass');
-    map.createLayer('Tree bases');
-
-    this.enemies = game.add.group();
-    const enemies = this.enemies;
-    enemies.hp = 3;
-    enemies.enableBody = true;
-    enemies.physicsBodyType = Phaser.Physics.ARCADE;
-    this.enemyWave = ['tank1', 'tank2', 'tank3', 'tank4', 'tank5', 'tank6', 'tank7', 'tank8', 'tank9'];
-    let enemyWave = this.enemyWave;
-    for (let i = 0; i < enemyWave.length; i++) {
-      enemyWave[i] = enemies.create(-16, 116, enemyWave[i]);
-      enemyWave[i].anchor.set(0.5);
-      enemyWave[i].animations.add('explosion', false);
-      enemyWave[i].health = 10;
-    }
-
+  createBackgroundMusic() {
+    this.backgroundMusic = game.add.audio('backgroundMusic', true);
+    this.backgroundMusic.play();
+  },
+  createBullets() {
     this.bullets = game.add.group();
     let bullets = this.bullets;
     bullets.enableBody = true;
@@ -37,46 +19,29 @@ PhaserGame.Game.prototype = {
     bullets.createMultiple(500, 'bullet1');
     bullets.setAll('checkWorldBounds', true);
     bullets.setAll('outOfBoundsKill', true);
-
-    this.guns = game.add.group();
-    let guns = this.guns;
-    this.turretPosition = ['turret1', 'turret1', 'turret1', 'turret1', 'turret1', 'turret1', 'turret1', 'turret1', 'turret1', 'turret1']
-    let turretPosition = this.turretPosition;
-    this.coinPosition = ['coin', 'coin', 'coin', 'coin', 'coin', 'coin', 'coin', 'coin', 'coin', 'coin']
-    let coinPosition = this.coinPosition;
-    this.turretSpots = {
-      'x' : [352, 800, 256, 448, 96, 320, 128, 354, 832, 864],
-      'y' : [32, 96, 256, 256, 320, 480, 640, 704, 384, 544]
-    }
-    let turretSpots = this.turretSpots;
-    for (let i = 0; i < turretPosition.length; i++) {
-      turretPosition[i] = guns.create(turretSpots.x[i], turretSpots.y[i], turretPosition[i]);
-      turretPosition[i].anchor.set(0.5);
-      coinPosition[i] = game.add.button(turretSpots.x[i], turretSpots.y[i], coinPosition[i], this.createTurret);
-      coinPosition[i].anchor.set(0.5);
-    }
-
-    explosions = game.add.group();
-    explosions.createMultiple(20, 'explosion');
-
-    this.bmd = this.add.bitmapData(game.width, game.height);
-    this.bmd.addToWorld();
-    this.plot();
-    map.createLayer('Tree Tops and Bridges');
-
-    const startingMoney = 40;
-    const startingScore = 0;
-    const startingWaveNumber = 1;
-    let score = game.add.text(820, 10, 'Score:');
-    let money = game.add.text(412, 10, "$ 40");
-    const waveNumber = game.add.text(30, 10, 'Wave 1');
-
-    this.backgroundMusic = game.add.audio('backgroundMusic', true);
-    this.backgroundMusic.play();
   },
-  plot() {
+  createEnemies() {
+    this.enemies = game.add.group();
+    const enemies = this.enemies;
+    enemies.hp = 3;
+    enemies.enableBody = true;
+    enemies.physicsBodyType = Phaser.Physics.ARCADE;
+  },
+  createEnemyWave() {
+    let enemies = this.createEnemeies()
+    let enemyWave = ['tank1', 'tank2', 'tank3', 'tank4', 'tank5', 'tank6', 'tank7', 'tank8', 'tank9'];
+    this.enemyWave = enemyWave;
+    for (let i = 0; i < enemyWave.length; i++) {
+      enemyWave[i] = enemies.create(-16, 116, enemyWave[i]);
+      enemyWave[i].anchor.set(0.5);
+      enemyWave[i].animations.add('explosion', false);
+      enemyWave[i].health = 10;
+    }
+  },
+  createPlot() {
     this.path = [];
     let ix = 0;
+    console.log('this: ', this);
     const x = 1 / (game.width + (this.enemyWave.length - 1) * 100);
     this.points= {
       'x': [-466, -416, -366, -316, -266, -216, -156, -56, -16, 100, 200, 300, 400, 500, 600, 700, 740, 675, 600, 500, 400, 300, 205, 180, 190, 290, 390, 490, 590, 690, 790, 850, 860, 860, 860, 860, 860, 860, 860, 860, 860, 860],
@@ -100,8 +65,60 @@ PhaserGame.Game.prototype = {
     //   this.bmd.rect(this.points.x[p]-3, this.points.y[p]-3, 6, 6, 'rgba(255, 0, 0, 1)');
     // }
   },
+  createMap() {
+    const map = this.add.tilemap('map');
+    // First param :name of tileset from tiled; second: game.load.image
+    map.addTilesetImage('terrain_atlas', 'terrain');
+    map.addTilesetImage('turrets32', 'turrets');
+    map.createLayer('Road');
+    map.createLayer('Grass');
+    map.createLayer('Tree bases');
+    this.bmd = this.add.bitmapData(game.width, game.height);
+    this.bmd.addToWorld();
+    this.createPlot();
+    map.createLayer('Tree Tops and Bridges');
+  },
+  createScreenText() {
+    const startingMoney = 40;
+    const startingScore = 0;
+    const startingWaveNumber = 1;
+    let score = game.add.text(820, 10, 'Score:');
+    let money = game.add.text(412, 10, "$ 40");
+    const waveNumber = game.add.text(30, 10, 'Wave 1');
+  },
+  createTurrets() {
+    this.guns = game.add.group();
+    let guns = this.guns;
+    this.turretPosition = ['turret1', 'turret1', 'turret1', 'turret1', 'turret1', 'turret1', 'turret1', 'turret1', 'turret1', 'turret1']
+    let turretPosition = this.turretPosition;
+    this.coinPosition = ['coin', 'coin', 'coin', 'coin', 'coin', 'coin', 'coin', 'coin', 'coin', 'coin']
+    let coinPosition = this.coinPosition;
+    this.turretSpots = {
+      'x' : [352, 800, 256, 448, 96, 320, 128, 354, 832, 864],
+      'y' : [32, 96, 256, 256, 320, 480, 640, 704, 384, 544]
+    }
+    let turretSpots = this.turretSpots;
+    for (let i = 0; i < turretPosition.length; i++) {
+      turretPosition[i] = guns.create(turretSpots.x[i], turretSpots.y[i], turretPosition[i]);
+      turretPosition[i].anchor.set(0.5);
+      coinPosition[i] = game.add.button(turretSpots.x[i], turretSpots.y[i], coinPosition[i], this.createTurret);
+      coinPosition[i].anchor.set(0.5);
+    }
+
+    explosions = game.add.group();
+    explosions.createMultiple(20, 'explosion');
+  },
+  create() {
+    console.log('this: ', this);
+    this.createMap(); 
+    this.createEnemies();
+    this.createBullets();
+    this.createTurrets();
+    this.createBackgroundMusic();
+    this.createScreenText();
+  },
   update() {
-    let enemyWave = this.enemyWave;
+    let enemyWave = this.createEnemyWave();
     for (let i = 0; i < enemyWave.length; i++) {
       const offset = this.path[this.pi + ((enemyWave.length - 1) * 40 - i * 40)];
       if (enemyWave[8].x !== 860) {
