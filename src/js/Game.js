@@ -12,10 +12,8 @@ PhaserGame.Game.prototype = {
     // First param :name of tileset from tiled; second: game.load.image
     map.addTilesetImage('terrain_atlas', 'terrain');
     map.addTilesetImage('turrets32', 'turrets');
-    map.createLayer('Road');
-    map.createLayer('Grass');
-    map.createLayer('Tree bases');
-    map.createLayer('Tree Tops and Bridges');
+    let layers = ['Road', 'Grass', 'Tree bases', 'Tree Tops and Bridges'];
+    layers.forEach(layer => map.createLayer(layer).scale.set(1));
     this.bmd = this.add.bitmapData(game.width, game.height);
     this.bmd.addToWorld();
   },
@@ -36,12 +34,12 @@ PhaserGame.Game.prototype = {
     enemies.physicsBodyType = Phaser.Physics.ARCADE;
     this.enemyWave = ['tank1', 'tank2', 'tank3', 'tank4', 'tank5', 'tank6', 'tank7', 'tank8', 'tank9'];
     let enemyWave = this.enemyWave;
-    for (let i = 0; i < enemyWave.length; i++) {
-      enemyWave[i] = enemies.create(-16, 116, enemyWave[i]);
+    this.enemyWave.forEach(function(enemyString, i) {
+      enemyWave[i] = enemies.create(-16, 116, enemyString);
       enemyWave[i].anchor.set(0.5);
       enemyWave[i].animations.add('explosion', false);
       enemyWave[i].health = 10;
-    }
+    });
   },
   createTurrets() {
     this.guns = game.add.group();
