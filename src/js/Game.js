@@ -7,14 +7,21 @@ for(let i = 0; i < 10; i++) {
 PhaserGame.Game = game => { /* this.weapons = [];*/ }
 
 PhaserGame.Game.prototype = {
+  createScale() {
+    if ((window.innerWidth/1024) > (window.innerHeight/768)) {
+      this.scale = window.innerHeight/768;
+    } else {
+      this.scale = window.innerWidth/1024;
+    }
+  },
   createMap() {
     const map = this.add.tilemap('map');
     // First param :name of tileset from tiled; second: game.load.image
     map.addTilesetImage('terrain_atlas', 'terrain');
     map.addTilesetImage('turrets32', 'turrets');
     let layers = ['Road', 'Grass', 'Tree bases', 'Tree Tops and Bridges'];
-    layers.forEach(layer => map.createLayer(layer).scale.set(1));
-    this.bmd = this.add.bitmapData(game.width, game.height);
+    layers.forEach(layer => map.createLayer(layer).scale.set(this.scale));
+    this.bmd = this.add.bitmapData(game.width * this.scale, game.height * this.scale);
     this.bmd.addToWorld();
   },
   createBullets() {
@@ -34,8 +41,9 @@ PhaserGame.Game.prototype = {
     enemies.physicsBodyType = Phaser.Physics.ARCADE;
     this.enemyWave = ['tank1', 'tank2', 'tank3', 'tank4', 'tank5', 'tank6', 'tank7', 'tank8', 'tank9'];
     let enemyWave = this.enemyWave;
-    this.enemyWave.forEach(function(enemyString, i) {
-      enemyWave[i] = enemies.create(-16, 116, enemyString);
+    let scale = this.scale;
+    enemyWave.forEach(function(enemyString, i) {
+      enemyWave[i] = enemies.create(-16 * scale, 116 * scale, enemyString);
       enemyWave[i].anchor.set(0.5);
       enemyWave[i].animations.add('explosion', false);
       enemyWave[i].health = 10;
@@ -48,17 +56,20 @@ PhaserGame.Game.prototype = {
     let turretPosition = this.turretPosition;
     this.coinPosition = ['coin', 'coin', 'coin', 'coin', 'coin', 'coin', 'coin', 'coin', 'coin', 'coin']
     let coinPosition = this.coinPosition;
+    // These are the values for adding turrets.  User Dynamically ads them through touch/click.
     this.turretSpots = {
       'x' : [352, 800, 256, 448, 96, 320, 128, 354, 832, 864],
       'y' : [32, 96, 256, 256, 320, 480, 640, 704, 384, 544]
     }
     let turretSpots = this.turretSpots;
-    for (let i = 0; i < turretPosition.length; i++) {
-      turretPosition[i] = guns.create(turretSpots.x[i], turretSpots.y[i], turretPosition[i]);
+    let createTurret = this.createTurret;
+    let scale = this.scale;
+    turretPosition.forEach(function (turret, i) {
+      turretPosition[i] = guns.create(turretSpots.x[i] * scale, turretSpots.y[i] * scale, turretPosition[i]);
       turretPosition[i].anchor.set(0.5);
-      coinPosition[i] = game.add.button(turretSpots.x[i], turretSpots.y[i], coinPosition[i], this.createTurret);
+      coinPosition[i] = game.add.button(turretSpots.x[i] * scale, turretSpots.y[i] * scale, coinPosition[i] * scale, createTurret);
       coinPosition[i].anchor.set(0.5);
-    }
+    });
     explosions = game.add.group();
     explosions.createMultiple(20, 'explosion');
   },
@@ -72,9 +83,10 @@ PhaserGame.Game.prototype = {
   },
   createGameMusic() {
     this.backgroundMusic = game.add.audio('backgroundMusic', true);
-    this.backgroundMusic.play();
+    // this.backgroundMusic.play();
   },
   create() {
+    this.createScale();
     this.createMap();
     this.createBullets();
     this.createEnemies();
@@ -86,7 +98,7 @@ PhaserGame.Game.prototype = {
   createEnemyPlot() {
     this.path = [];
     let ix = 0;
-    const x = 1 / (game.width + (this.enemyWave.length - 1) * 100);
+    const x = 1 / (game.width * this.scale);
     this.points= {
       'x': [-466, -416, -366, -316, -266, -216, -156, -56, -16, 100, 200, 300, 400, 500, 600, 700, 740, 675, 600, 500, 400, 300, 205, 180, 190, 290, 390, 490, 590, 690, 790, 850, 860, 860, 860, 860, 860, 860, 860, 860, 860, 860],
       'y': [130, 130, 130, 130, 130, 130, 130, 130, 130, 130, 130, 130, 130, 145, 160, 180, 250, 310, 340, 350, 350, 365, 400, 475, 550, 590, 610, 623, 630, 638, 650, 720, 800, 850, 900, 950, 1000, 1050, 1100, 1150, 1200, 1250]
@@ -97,7 +109,7 @@ PhaserGame.Game.prototype = {
       const py = this.math.catmullRomInterpolation(this.points.y, i);
       //This draws the path onto the screen to edit the path
       // this.bmd.rect(px, py, 1, 1, 'rgba(255, 255, 255, 1)');
-      const node = {x: px, y: py, angle: 0};
+      const node = {x: (px * this.scale), y: (py * this.scale), angle: 0};
       if (ix > 0) {
         node.angle = this.math.angleBetweenPoints(this.path[ix - 1], node);
       }
