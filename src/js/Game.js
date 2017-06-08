@@ -1,25 +1,36 @@
-var explosions; 
+var explosions, money, moneyText, score, scoreText; 
 let nextFire = [];
 for(let i = 0; i < 10; i++) {
   nextFire[i] = 0;
 }
-
-PhaserGame.Game = game => { /* this.weapons = [];*/ }
-
-PhaserGame.Game.prototype = {
+PhaserGame.Game = {
+  create() {
+    this.createScale();
+    const map = this.add.tilemap('map');
+    this.createMap(map);
+    this.createBullets();
+    this.createEnemies();
+    this.createTurrets();
+    map.createLayer('Tree Tops and Bridges').scale.set(this.scale);
+    this.createScoreAndStats();
+    this.createEnemyPlot();
+    this.createGameMusic();
+  },
   createScale() {
-    if ((window.innerWidth/1024) > (window.innerHeight/768)) {
-      this.scale = window.innerHeight/768;
-    } else {
-      this.scale = window.innerWidth/1024;
+    this.scale = 1;
+    if (window.innerWidth < 1024 || window.innerHeight < 768) {
+      if ((window.innerWidth/1024) > (window.innerHeight/768)) {
+        this.scale = window.innerHeight/768;
+      } else {
+        this.scale = window.innerWidth/1024;
+      }
     }
   },
-  createMap() {
-    const map = this.add.tilemap('map');
+  createMap(map) {
     // First param :name of tileset from tiled; second: game.load.image
     map.addTilesetImage('terrain_atlas', 'terrain');
     map.addTilesetImage('turrets32', 'turrets');
-    let layers = ['Road', 'Grass', 'Tree bases', 'Tree Tops and Bridges'];
+    let layers = ['Road', 'Grass', 'Tree bases'];
     layers.forEach(layer => map.createLayer(layer).scale.set(this.scale));
     this.bmd = this.add.bitmapData(game.width * this.scale, game.height * this.scale);
     this.bmd.addToWorld();
@@ -27,6 +38,7 @@ PhaserGame.Game.prototype = {
   createBullets() {
     this.bullets = game.add.group();
     let bullets = this.bullets;
+    bullets.scale.set(this.scale);
     bullets.enableBody = true;
     bullets.physicsBodyType = Phaser.Physics.ARCADE;
     bullets.createMultiple(500, 'bullet1');
@@ -36,14 +48,14 @@ PhaserGame.Game.prototype = {
   createEnemies() {
     this.enemies = game.add.group();
     const enemies = this.enemies;
+    enemies.scale.set(this.scale);
     enemies.hp = 3;
     enemies.enableBody = true;
     enemies.physicsBodyType = Phaser.Physics.ARCADE;
     this.enemyWave = ['tank1', 'tank2', 'tank3', 'tank4', 'tank5', 'tank6', 'tank7', 'tank8', 'tank9'];
     let enemyWave = this.enemyWave;
-    let scale = this.scale;
-    enemyWave.forEach(function(enemyString, i) {
-      enemyWave[i] = enemies.create(-16 * scale, 116 * scale, enemyString);
+    enemyWave.forEach((enemyString, i) => {
+      enemyWave[i] = enemies.create(-16, 116, enemyString);
       enemyWave[i].anchor.set(0.5);
       enemyWave[i].animations.add('explosion', false);
       enemyWave[i].health = 10;
@@ -52,6 +64,7 @@ PhaserGame.Game.prototype = {
   createTurrets() {
     this.guns = game.add.group();
     let guns = this.guns;
+    guns.scale.set(this.scale);
     this.turretPosition = ['turret1', 'turret1', 'turret1', 'turret1', 'turret1', 'turret1', 'turret1', 'turret1', 'turret1', 'turret1']
     let turretPosition = this.turretPosition;
     this.coinPosition = ['coin', 'coin', 'coin', 'coin', 'coin', 'coin', 'coin', 'coin', 'coin', 'coin']
@@ -64,36 +77,33 @@ PhaserGame.Game.prototype = {
     let turretSpots = this.turretSpots;
     let createTurret = this.createTurret;
     let scale = this.scale;
-    turretPosition.forEach(function (turret, i) {
-      turretPosition[i] = guns.create(turretSpots.x[i] * scale, turretSpots.y[i] * scale, turretPosition[i]);
+    turretPosition.forEach((turret, i) => {
+      turretPosition[i] = guns.create(turretSpots.x[i], turretSpots.y[i], turretPosition[i]);
       turretPosition[i].anchor.set(0.5);
-      coinPosition[i] = game.add.button(turretSpots.x[i] * scale, turretSpots.y[i] * scale, coinPosition[i] * scale, createTurret);
+      coinPosition[i] = game.add.button(turretSpots.x[i] * scale, turretSpots.y[i] * scale, coinPosition[i], createTurret);
       coinPosition[i].anchor.set(0.5);
     });
     explosions = game.add.group();
+    explosions.scale.set(this.scale);
     explosions.createMultiple(20, 'explosion');
   },
+  createScore() {
+    score = 0;
+    scoreText = game.add.text(820, 10, 'Score: ' + score);
+  },
+  createMoney() {
+    money = 40;
+    moneyText = game.add.text(412, 10, "$ " + money);
+  },
   createScoreAndStats() {
-    const startingMoney = 40;
-    const startingScore = 0;
+    this.createScore();
+    this.createMoney();
     const startingWaveNumber = 1;
-    let score = game.add.text(820, 10, 'Score:');
-    let money = game.add.text(412, 10, "$ 40");
     const waveNumber = game.add.text(30, 10, 'Wave 1');
   },
   createGameMusic() {
     this.backgroundMusic = game.add.audio('backgroundMusic', true);
-    // this.backgroundMusic.play();
-  },
-  create() {
-    this.createScale();
-    this.createMap();
-    this.createBullets();
-    this.createEnemies();
-    this.createTurrets();
-    this.createScoreAndStats();
-    this.createEnemyPlot();
-    this.createGameMusic();
+    this.backgroundMusic.play();
   },
   createEnemyPlot() {
     this.path = [];
@@ -109,7 +119,7 @@ PhaserGame.Game.prototype = {
       const py = this.math.catmullRomInterpolation(this.points.y, i);
       //This draws the path onto the screen to edit the path
       // this.bmd.rect(px, py, 1, 1, 'rgba(255, 255, 255, 1)');
-      const node = {x: (px * this.scale), y: (py * this.scale), angle: 0};
+      const node = {x: px, y: py, angle: 0};
       if (ix > 0) {
         node.angle = this.math.angleBetweenPoints(this.path[ix - 1], node);
       }
@@ -151,16 +161,29 @@ PhaserGame.Game.prototype = {
     }
     game.physics.arcade.overlap(this.bullets, this.enemies, this.collisionHandler);
   },
+  updateMoney(amount) {
+    money -= amount;
+    moneyText.setText('$ ' + money);
+  },
   createTurret: coin => {
-    coin.kill()
-    game.add.audio('cashRegister').play();
+    if (money > 0) {
+      coin.kill();
+      PhaserGame.Game.updateMoney(8);
+      game.add.audio('cashRegister').play();
+    }
+  },
+  updateScore(points) {
+    score += points;
+    scoreText.setText('Score: ' + score); 
   },
   collisionHandler: (bullet, enemy) => {
     bullet.kill();
     enemy.health -= 1;
+    PhaserGame.Game.updateScore(1);
     if(enemy.health <= 0) {
       game.add.audio('explosion').play();
       enemy.kill();
+      PhaserGame.Game.updateScore(5);
       const explosion = explosions.getFirstExists(false);
       explosion.reset(enemy.body.x - 70, enemy.body.y - 70);
       explosion.animations.add('explosion');
@@ -185,8 +208,7 @@ PhaserGame.Game.prototype = {
         }
       }
     }
-  },
-  render() { }
+  }
 };
 
 game.state.add('Game', PhaserGame.Game);
