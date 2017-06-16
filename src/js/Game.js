@@ -1,6 +1,6 @@
 var explosions, money, moneyText, score, scoreText, restartGame; 
 let nextFire = [];
-let wave = 0;
+let wave = 1;
 let enemiesKilled = 0;
 let pausedGame = false;
 for(let i = 0; i < 10; i++) {
@@ -100,11 +100,11 @@ PhaserGame.Game = {
   },
   createScore() {
     score = 0;
-    scoreText = game.add.text(820, 10, 'Score: ' + score);
+    scoreText = game.add.text(820 * this.scale, 10 * this.scale, 'Score: ' + score);
   },
   createMoney() {
     money = 40;
-    moneyText = game.add.text(412, 10, "$ " + money);
+    moneyText = game.add.text(412 * this.scale, 10 * this.scale, "$ " + money);
   },
   createScoreAndStats() {
     this.createScore();
@@ -144,34 +144,43 @@ PhaserGame.Game = {
   },
   update() {
     const map = this.add.tilemap('map');
-    if (wave === 0) {
-      this.startTankMission(this.enemyWave);
-      if (enemiesKilled >= this.enemyWave.length) {
-        PhaserGame.Game.createEnemies();
-        // map.createLayer('Tree Tops and Bridges').scale.set(this.scale);
-        PhaserGame.Game.createEnemyPlot(PhaserGame.Game.enemyWave);
-        wave ++;
-      }
-    }
     if (wave === 1) {
       this.startTankMission(this.enemyWave);
-      if (enemiesKilled >= this.enemyWave.length * 2) {
+      if (enemiesKilled >= this.enemyWave.length * wave) {
         PhaserGame.Game.createEnemies();
         // map.createLayer('Tree Tops and Bridges').scale.set(this.scale);
         PhaserGame.Game.createEnemyPlot(PhaserGame.Game.enemyWave);
-        wave ++;
+        wave++;
       }
     }
     if (wave === 2) {
       this.startTankMission(this.enemyWave);
+      if (enemiesKilled >= this.enemyWave.length * wave) {
+        PhaserGame.Game.createEnemies();
+        // map.createLayer('Tree Tops and Bridges').scale.set(this.scale);
+        PhaserGame.Game.createEnemyPlot(PhaserGame.Game.enemyWave);
+        wave++;
+      }
+    }
+    if (wave === 3) {
+      this.startTankMission(this.enemyWave);
+      if (enemiesKilled >= this.enemyWave.length * wave) {
+        enemiesKilled = 0;
+        game.state.start('Boot');
+      }
     }
   },
   startTankMission(enemies) {
     for (let i = 0; i < enemies.length; i++) {
-      const offset = this.path[this.pi + ((enemies.length - 1) * 40 - i * 40)];
-      enemies[i].x = offset.x;
-      enemies[i].y = offset.y;
-      enemies[i].rotation = offset.angle;
+      try {
+        const offset = this.path[this.pi + ((enemies.length - 1) * 40 - i * 40)];
+        enemies[i].x = offset.x;
+        enemies[i].y = offset.y;
+        enemies[i].rotation = offset.angle;
+      }
+      catch(e) {
+        game.state.start('Game');
+      }
     }
     this.pi++;
     let turretPosition = this.turretPosition;
@@ -220,7 +229,7 @@ PhaserGame.Game = {
       const explosion = explosions.getFirstExists(false);
       explosion.reset(enemy.body.x - 70, enemy.body.y - 70);
       explosion.animations.add('explosion');
-      explosion.animations.play('explosion');
+      explosion.animations.play('explosion', null, false, true);
     }
   },
   aim: function (x) {
