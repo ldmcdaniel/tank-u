@@ -1,4 +1,4 @@
-var explosions, money, moneyText, score, scoreText, restartGame; 
+var explosions, money, moneyText, score, scoreText, restartGame, waveNumber; 
 let nextFire = [];
 let wave = 1;
 let enemiesKilled = 0;
@@ -18,15 +18,6 @@ PhaserGame.Game = {
     this.createEnemyPlot(this.enemyWave);
     this.createScoreAndStats();
     this.createGameMusic();
-    restartGame = game.add.text(0, 0, 'Restart');
-    restartGame.inputEnabled = true;
-    restartGame.events.onInputUp.add(function () {
-      PhaserGame.Game.createEnemies();
-      this.pi = 0;
-      PhaserGame.Game.createEnemyPlot(PhaserGame.Game.enemyWave1);
-      // enemiesKilled = 0;
-      // game.state.start('Game');
-    });
   },
   createScale() {
     this.scale = 1;
@@ -53,7 +44,7 @@ PhaserGame.Game = {
     bullets.scale.set(this.scale);
     bullets.enableBody = true;
     bullets.physicsBodyType = Phaser.Physics.ARCADE;
-    bullets.createMultiple(5000, 'bullet1');
+    bullets.createMultiple(2000, 'bullet1');
     bullets.setAll('checkWorldBounds', true);
     bullets.setAll('outOfBoundsKill', true);
   },
@@ -109,8 +100,7 @@ PhaserGame.Game = {
   createScoreAndStats() {
     this.createScore();
     this.createMoney();
-    // const startingWaveNumber = 1;
-    // const waveNumber = game.add.text(30, 10, 'Wave 1');
+    waveNumber = game.add.text(30, 10, 'Wave ' + wave);
   },
   createGameMusic() {
     this.backgroundMusic = game.add.audio('backgroundMusic', true);
@@ -151,6 +141,7 @@ PhaserGame.Game = {
         // map.createLayer('Tree Tops and Bridges').scale.set(this.scale);
         PhaserGame.Game.createEnemyPlot(PhaserGame.Game.enemyWave);
         wave++;
+        waveNumber.setText('Wave ' + wave);
       }
     }
     if (wave === 2) {
@@ -160,13 +151,14 @@ PhaserGame.Game = {
         // map.createLayer('Tree Tops and Bridges').scale.set(this.scale);
         PhaserGame.Game.createEnemyPlot(PhaserGame.Game.enemyWave);
         wave++;
+        waveNumber.setText('Wave ' + wave);
       }
     }
     if (wave === 3) {
       this.startTankMission(this.enemyWave);
       if (enemiesKilled >= this.enemyWave.length * wave) {
         enemiesKilled = 0;
-        game.state.start('Boot');
+        game.state.start('GameWon');
       }
     }
   },
@@ -179,7 +171,7 @@ PhaserGame.Game = {
         enemies[i].rotation = offset.angle;
       }
       catch(e) {
-        game.state.start('Game');
+        game.state.start('GameLost');
       }
     }
     this.pi++;
@@ -254,4 +246,3 @@ PhaserGame.Game = {
 };
 
 game.state.add('Game', PhaserGame.Game);
-game.state.start('Boot');
