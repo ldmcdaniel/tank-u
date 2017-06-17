@@ -1,45 +1,73 @@
-var explosions; 
+var explosions, money, moneyText, score, scoreText, restartGame, waveNumber; 
 let nextFire = [];
+let wave = 1;
+let enemiesKilled = 0;
+let pausedGame = false;
 for(let i = 0; i < 10; i++) {
   nextFire[i] = 0;
 }
-
-PhaserGame.Game = game => { /* this.weapons = [];*/ }
-
-PhaserGame.Game.prototype = {
+PhaserGame.Game = {
   create() {
+    this.createScale();
     const map = this.add.tilemap('map');
+    this.createMap(map);
+    this.createBullets();
+    this.createTurrets();
+    this.createEnemies();
+    map.createLayer('Tree Tops and Bridges').scale.set(this.scale);
+    this.createEnemyPlot(this.enemyWave);
+    this.createScoreAndStats();
+    this.createGameMusic();
+  },
+  createScale() {
+    this.scale = 1;
+    if (window.innerWidth < 1024 || window.innerHeight < 768) {
+      if ((window.innerWidth/1024) > (window.innerHeight/768)) {
+        this.scale = window.innerHeight/768;
+      } else {
+        this.scale = window.innerWidth/1024;
+      }
+    }
+  },
+  createMap(map) {
     // First param :name of tileset from tiled; second: game.load.image
     map.addTilesetImage('terrain_atlas', 'terrain');
     map.addTilesetImage('turrets32', 'turrets');
-    map.createLayer('Road');
-    map.createLayer('Grass');
-    map.createLayer('Tree bases');
-
-    this.enemies = game.add.group();
-    const enemies = this.enemies;
-    enemies.hp = 3;
-    enemies.enableBody = true;
-    enemies.physicsBodyType = Phaser.Physics.ARCADE;
-    this.enemyWave = ['tank1', 'tank2', 'tank3', 'tank4', 'tank5', 'tank6', 'tank7', 'tank8', 'tank9'];
-    let enemyWave = this.enemyWave;
-    for (let i = 0; i < enemyWave.length; i++) {
-      enemyWave[i] = enemies.create(-16, 116, enemyWave[i]);
-      enemyWave[i].anchor.set(0.5);
-      enemyWave[i].animations.add('explosion', false);
-      enemyWave[i].health = 10;
-    }
-
+    let layers = ['Road', 'Grass', 'Tree bases'];
+    layers.forEach(layer => map.createLayer(layer).scale.set(this.scale));
+    this.bmd = this.add.bitmapData(game.width * this.scale, game.height * this.scale);
+    this.bmd.addToWorld();
+  },
+  createBullets() {
     this.bullets = game.add.group();
     let bullets = this.bullets;
+    bullets.scale.set(this.scale);
     bullets.enableBody = true;
     bullets.physicsBodyType = Phaser.Physics.ARCADE;
-    bullets.createMultiple(500, 'bullet1');
+    bullets.createMultiple(2000, 'bullet1');
     bullets.setAll('checkWorldBounds', true);
     bullets.setAll('outOfBoundsKill', true);
-
+  },
+  createEnemies() {
+    this.enemies = game.add.group();
+    const enemies = this.enemies;
+    enemies.scale.set(this.scale);
+    enemies.enableBody = true;
+    enemies.physicsBodyType = Phaser.Physics.ARCADE;
+    this.enemyWave = ['tank1', 'tank2', 'tank3', 'tank4', 'tank5', 'tank6', 'tank7', 'tank8', 'tank9', 'tank10', 'tank11'];
+    this.enemyWave1 = ['tank10', 'tank11', 'tank12', 'tank13'];
+    let enemyWave = this.enemyWave;
+    enemyWave.forEach((enemyString, i) => {
+      enemyWave[i] = enemies.create(-16, 116, enemyString);
+      enemyWave[i].anchor.set(0.5);
+      enemyWave[i].animations.add('explosion', false);
+      enemyWave[i].health = 10 + i * 2;
+    });
+  },
+  createTurrets() {
     this.guns = game.add.group();
     let guns = this.guns;
+    guns.scale.set(this.scale);
     this.turretPosition = ['turret1', 'turret1', 'turret1', 'turret1', 'turret1', 'turret1', 'turret1', 'turret1', 'turret1', 'turret1']
     let turretPosition = this.turretPosition;
     this.coinPosition = ['coin', 'coin', 'coin', 'coin', 'coin', 'coin', 'coin', 'coin', 'coin', 'coin']
@@ -49,35 +77,39 @@ PhaserGame.Game.prototype = {
       'y' : [32, 96, 256, 256, 320, 480, 640, 704, 384, 544]
     }
     let turretSpots = this.turretSpots;
-    for (let i = 0; i < turretPosition.length; i++) {
+    let createTurret = this.createTurret;
+    let scale = this.scale;
+    turretPosition.forEach((turret, i) => {
       turretPosition[i] = guns.create(turretSpots.x[i], turretSpots.y[i], turretPosition[i]);
       turretPosition[i].anchor.set(0.5);
-      coinPosition[i] = game.add.button(turretSpots.x[i], turretSpots.y[i], coinPosition[i], this.createTurret);
+      coinPosition[i] = game.add.button(turretSpots.x[i] * scale, turretSpots.y[i] * scale, coinPosition[i], createTurret);
       coinPosition[i].anchor.set(0.5);
-    }
-
+    });
     explosions = game.add.group();
-    explosions.createMultiple(20, 'explosion');
-
-    this.bmd = this.add.bitmapData(game.width, game.height);
-    this.bmd.addToWorld();
-    this.plot();
-    map.createLayer('Tree Tops and Bridges');
-
-    const startingMoney = 40;
-    const startingScore = 0;
-    const startingWaveNumber = 1;
-    let score = game.add.text(820, 10, 'Score:');
-    let money = game.add.text(412, 10, "$ 40");
-    const waveNumber = game.add.text(30, 10, 'Wave 1');
-
+    explosions.scale.set(this.scale);
+    explosions.createMultiple(100, 'explosion');
+  },
+  createScore() {
+    score = 0;
+    scoreText = game.add.text(820 * this.scale, 10 * this.scale, 'Score: ' + score);
+  },
+  createMoney() {
+    money = 40;
+    moneyText = game.add.text(412 * this.scale, 10 * this.scale, "$ " + money);
+  },
+  createScoreAndStats() {
+    this.createScore();
+    this.createMoney();
+    waveNumber = game.add.text(30, 10, 'Wave ' + wave);
+  },
+  createGameMusic() {
     this.backgroundMusic = game.add.audio('backgroundMusic', true);
     this.backgroundMusic.play();
   },
-  plot() {
+  createEnemyPlot(enemies) {
     this.path = [];
     let ix = 0;
-    const x = 1 / (game.width + (this.enemyWave.length - 1) * 100);
+    const x = 1 / (game.width + (enemies.length - 1) * 100);
     this.points= {
       'x': [-466, -416, -366, -316, -266, -216, -156, -56, -16, 100, 200, 300, 400, 500, 600, 700, 740, 675, 600, 500, 400, 300, 205, 180, 190, 290, 390, 490, 590, 690, 790, 850, 860, 860, 860, 860, 860, 860, 860, 860, 860, 860],
       'y': [130, 130, 130, 130, 130, 130, 130, 130, 130, 130, 130, 130, 130, 145, 160, 180, 250, 310, 340, 350, 350, 365, 400, 475, 550, 590, 610, 623, 630, 638, 650, 720, 800, 850, 900, 950, 1000, 1050, 1100, 1150, 1200, 1250]
@@ -101,49 +133,95 @@ PhaserGame.Game.prototype = {
     // }
   },
   update() {
-    let enemyWave = this.enemyWave;
-    for (let i = 0; i < enemyWave.length; i++) {
-      const offset = this.path[this.pi + ((enemyWave.length - 1) * 40 - i * 40)];
-      if (enemyWave[8].x !== 860) {
-        enemyWave[i].x = offset.x;
-        enemyWave[i].y = offset.y;
-        enemyWave[i].rotation = offset.angle;
+    const map = this.add.tilemap('map');
+    if (wave === 1) {
+      this.startTankMission(this.enemyWave);
+      if (enemiesKilled >= this.enemyWave.length * wave) {
+        PhaserGame.Game.createEnemies();
+        // map.createLayer('Tree Tops and Bridges').scale.set(this.scale);
+        PhaserGame.Game.createEnemyPlot(PhaserGame.Game.enemyWave);
+        wave++;
+        waveNumber.setText('Wave ' + wave);
       }
-    };
+    }
+    if (wave === 2) {
+      this.startTankMission(this.enemyWave);
+      if (enemiesKilled >= this.enemyWave.length * wave) {
+        PhaserGame.Game.createEnemies();
+        // map.createLayer('Tree Tops and Bridges').scale.set(this.scale);
+        PhaserGame.Game.createEnemyPlot(PhaserGame.Game.enemyWave);
+        wave++;
+        waveNumber.setText('Wave ' + wave);
+      }
+    }
+    if (wave === 3) {
+      this.startTankMission(this.enemyWave);
+      if (enemiesKilled >= this.enemyWave.length * wave) {
+        enemiesKilled = 0;
+        game.state.start('GameWon');
+      }
+    }
+  },
+  startTankMission(enemies) {
+    for (let i = 0; i < enemies.length; i++) {
+      try {
+        const offset = this.path[this.pi + ((enemies.length - 1) * 40 - i * 40)];
+        enemies[i].x = offset.x;
+        enemies[i].y = offset.y;
+        enemies[i].rotation = offset.angle;
+      }
+      catch(e) {
+        game.state.start('GameLost');
+      }
+    }
     this.pi++;
-    // if (this.pi >= this.path.length) {
-    //   this.pi = 0;
-    // }
     let turretPosition = this.turretPosition;
-    for (let i = 0; i < enemyWave.length; i++) {
+    for (let i = 0; i < enemies.length; i++) {
       for (let j = 0; j < turretPosition.length; j++) {
-        if (this.physics.arcade.distanceToXY(enemyWave[i], turretPosition[j].x, turretPosition[j].y) < 200 && enemyWave[i].alive === true) {
-          turretPosition[j].rotation = game.physics.arcade.angleBetween(turretPosition[j], enemyWave[i]);
+        if (this.physics.arcade.distanceToXY(enemies[i], turretPosition[j].x, turretPosition[j].y) < 200 && enemies[i].alive === true) {
+          turretPosition[j].rotation = game.physics.arcade.angleBetween(turretPosition[j], enemies[i]);
         }
       }
     }
-
+    this.updateTurretAim();
+    game.physics.arcade.overlap(this.bullets, this.enemies, this.collisionHandler);
+  },
+  updateTurretAim() {
     for (let y = 0; y < 10; y++) {
       if (this.coinPosition[y].alive === false) {
         this.aim(y);
       }
     }
-    game.physics.arcade.overlap(this.bullets, this.enemies, this.collisionHandler);
+  },
+  updateMoney(amount) {
+    money -= amount;
+    moneyText.setText('$ ' + money);
   },
   createTurret: coin => {
-    coin.kill()
-    game.add.audio('cashRegister').play();
+    if (money - 8 >= 0) {
+      coin.kill();
+      PhaserGame.Game.updateMoney(8);
+      game.add.audio('cashRegister').play();
+    }
+  },
+  updateScore(points) {
+    score += points;
+    scoreText.setText('Score: ' + score); 
   },
   collisionHandler: (bullet, enemy) => {
     bullet.kill();
     enemy.health -= 1;
+    PhaserGame.Game.updateScore(1);
     if(enemy.health <= 0) {
       game.add.audio('explosion').play();
       enemy.kill();
+      enemiesKilled +=1
+      PhaserGame.Game.updateScore(5);
+      PhaserGame.Game.updateMoney(-5);
       const explosion = explosions.getFirstExists(false);
       explosion.reset(enemy.body.x - 70, enemy.body.y - 70);
       explosion.animations.add('explosion');
-      explosion.animations.play('explosion');
+      explosion.animations.play('explosion', null, false, true);
     }
   },
   aim: function (x) {
@@ -164,9 +242,7 @@ PhaserGame.Game.prototype = {
         }
       }
     }
-  },
-  render() { }
+  }
 };
 
 game.state.add('Game', PhaserGame.Game);
-game.state.start('Boot');
