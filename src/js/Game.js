@@ -54,15 +54,24 @@ PhaserGame.Game = {
     enemies.scale.set(this.scale);
     enemies.enableBody = true;
     enemies.physicsBodyType = Phaser.Physics.ARCADE;
-    this.enemyWave = ['tank1', 'tank2', 'tank3', 'tank4', 'tank5', 'tank6', 'tank7', 'tank8', 'tank9', 'tank10', 'tank11'];
-    this.enemyWave1 = ['tank10', 'tank11', 'tank12', 'tank13'];
+    // this.enemyWave = ['tank1', 'tank2', 'tank3', 'tank4', 'tank5', 'tank6', 'tank7', 'tank8', 'tank9', 'tank10', 'tank11'];
+    const waveNumber = wave-1;
+    console.log(waveNumber);
+    this.enemyWave = this.wavesOfWaves()[waveNumber];
     let enemyWave = this.enemyWave;
     enemyWave.forEach((enemyString, i) => {
       enemyWave[i] = enemies.create(-16, 116, enemyString);
       enemyWave[i].anchor.set(0.5);
       enemyWave[i].animations.add('explosion', false);
-      enemyWave[i].health = 10 + i * 2;
+      enemyWave[i].health = parseInt(enemyWave[i].key.split('k')[1]);
     });
+  },
+  wavesOfWaves() {
+      return [
+        ['tank8', 'tank10', 'tank8', 'tank11', 'tank10', 'tank8', 'tank23', 'tank10', 'tank8', 'tank10'],
+        ['tank11', 'tank23', 'tank11', 'tank24', 'tank23', 'tank11', 'tank25', 'tank23', 'tank11', 'tank23'],
+        ['tank24', 'tank25', 'tank24', 'tank30', 'tank25', 'tank24', 'tank31', 'tank25', 'tank24', 'tank25']
+      ]
   },
   createTurrets() {
     this.guns = game.add.group();
@@ -133,33 +142,24 @@ PhaserGame.Game = {
     // }
   },
   update() {
-    const map = this.add.tilemap('map');
-    if (wave === 1) {
-      this.startTankMission(this.enemyWave);
-      if (enemiesKilled >= this.enemyWave.length * wave) {
-        PhaserGame.Game.createEnemies();
-        // map.createLayer('Tree Tops and Bridges').scale.set(this.scale);
-        PhaserGame.Game.createEnemyPlot(PhaserGame.Game.enemyWave);
-        wave++;
-        waveNumber.setText('Wave ' + wave);
-      }
-    }
-    if (wave === 2) {
-      this.startTankMission(this.enemyWave);
-      if (enemiesKilled >= this.enemyWave.length * wave) {
-        PhaserGame.Game.createEnemies();
-        // map.createLayer('Tree Tops and Bridges').scale.set(this.scale);
-        PhaserGame.Game.createEnemyPlot(PhaserGame.Game.enemyWave);
-        wave++;
-        waveNumber.setText('Wave ' + wave);
-      }
-    }
-    if (wave === 3) {
+    if (wave < 3) {
+      this.sendEnemyWave();
+    } else {
       this.startTankMission(this.enemyWave);
       if (enemiesKilled >= this.enemyWave.length * wave) {
         enemiesKilled = 0;
         game.state.start('GameWon');
       }
+    }
+  },
+  sendEnemyWave() {
+    this.startTankMission(this.enemyWave);
+    if (enemiesKilled >= this.enemyWave.length * wave) {
+      // map.createLayer('Tree Tops and Bridges').scale.set(this.scale);
+      PhaserGame.Game.createEnemyPlot(PhaserGame.Game.enemyWave);
+      wave++;
+      waveNumber.setText('Wave ' + wave);
+      PhaserGame.Game.createEnemies();
     }
   },
   startTankMission(enemies) {
