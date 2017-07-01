@@ -113,7 +113,7 @@ PhaserGame.Game = {
   },
   createGameMusic() {
     this.backgroundMusic = game.add.audio('backgroundMusic', true);
-    this.backgroundMusic.play();
+    this.backgroundMusic.play('', 0, 0.3, true);
   },
   createEnemyPlot(enemies) {
     this.path = [];
@@ -213,7 +213,7 @@ PhaserGame.Game = {
     enemy.health -= 1;
     PhaserGame.Game.updateScore(1);
     if(enemy.health <= 0) {
-      game.add.audio('explosion').play();
+      game.add.audio('explosion').play('', 0, 0.4);
       enemy.kill();
       enemiesKilled +=1
       PhaserGame.Game.updateScore(5);
@@ -238,7 +238,7 @@ PhaserGame.Game = {
         if (this.physics.arcade.distanceToXY(enemy, turretPosition.x, turretPosition.y) < 200 && enemy.alive === true && enemy.x > 0 && enemy.y < 768) {
           bullet.rotation = game.physics.arcade.angleBetween(turretPosition, enemy);
           game.physics.arcade.moveToObject(bullet, enemy, 300);
-          game.add.audio('shot').play();
+          game.add.audio('shot').play('', 0, 0.1);
         }
       }
     }
