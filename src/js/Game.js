@@ -8,18 +8,24 @@ for(let i = 0; i < 10; i++) {
 }
 PhaserGame.Game = {
   create() {
-    this.createScale();
+    this.gameWorld();
+  },
+  gameWorld() {
+    this.setScale();
+    this.makeElements();
+    this.createEnemyPlot(this.enemyWave);
+    this.scoreAndStats();
+    this.createGameMusic();
+  },
+  makeElements() {
     const map = this.add.tilemap('map');
     this.createMap(map);
     this.createBullets();
     this.createTurrets();
     this.createEnemies();
     map.createLayer('Tree Tops and Bridges').scale.set(this.scale);
-    this.createEnemyPlot(this.enemyWave);
-    this.createScoreAndStats();
-    this.createGameMusic();
   },
-  createScale() {
+  setScale() {
     this.scale = 1;
     if (window.innerWidth < 1024 || window.innerHeight < 768) {
       if ((window.innerWidth/1024) > (window.innerHeight/768)) {
@@ -106,14 +112,14 @@ PhaserGame.Game = {
     money = 40;
     moneyText = game.add.text(412 * this.scale, 10 * this.scale, "$ " + money);
   },
-  createScoreAndStats() {
+  scoreAndStats() {
     this.createScore();
     this.createMoney();
     waveNumber = game.add.text(30, 10, 'Wave ' + wave);
   },
   createGameMusic() {
     this.backgroundMusic = game.add.audio('backgroundMusic', true);
-    this.backgroundMusic.play('', 0, 0.3, true);
+    this.backgroundMusic.play('', 0, 0.2, true);
   },
   createEnemyPlot(enemies) {
     this.path = [];
@@ -238,7 +244,7 @@ PhaserGame.Game = {
         if (this.physics.arcade.distanceToXY(enemy, turretPosition.x, turretPosition.y) < 200 && enemy.alive === true && enemy.x > 0 && enemy.y < 768) {
           bullet.rotation = game.physics.arcade.angleBetween(turretPosition, enemy);
           game.physics.arcade.moveToObject(bullet, enemy, 300);
-          game.add.audio('shot').play('', 0, 0.1);
+          game.add.audio('shot').play('', 0, 0.05);
         }
       }
     }
