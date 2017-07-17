@@ -34,11 +34,11 @@ Open with your favorite text editor and you should be ready to start coding.
 ##Changes I would like to make in future versions of the game include:
 
 - [ ] A bit of grass covering the title screen title and exploding to reveal the title.
-- [ ] More than 1 wave of tanks.
+- [x] More than 1 wave of tanks.
 - [ ] A button that appears between waves to trigger the release of the next wave of tanks.
-- [ ] Tanks with varying degrees of health and boss tanks.
-- [ ] Working tokens to purchase and upgrade turrets with different options.
+- [x] Tanks with varying degrees of health and boss tanks.
+- [x] Working tokens to purchase and upgrade turrets with different options.
 - [ ] Upgrades to turrets with greater range, increased damage, varying bullet speeds and sound effects.
 - [ ] Convert all .wav files to .mp3.
 - [ ] Clean files and lint code to make it more efficient.
-- [ ] An endgame state.
+- [x] An endgame state.
