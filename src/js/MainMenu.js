@@ -27,7 +27,7 @@ PhaserGame.MainMenu = {
   },
   createBackgroundMusic() {
     this.menuBackgroundMusic = game.add.audio('menuBackgroundMusic');
-    this.menuBackgroundMusic.play();
+    this.menuBackgroundMusic.play('', 0, 0.1);
   },
   start() {
     this.menuBackgroundMusic.stop();
