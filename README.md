@@ -29,6 +29,9 @@ grunt build-dev
 grunt serve
 ```
 
+To push to gh-pages, type:
+`git push origin `git subtree split --prefix public master`:gh-pages --force`
+
 Open with your favorite text editor and you should be ready to start coding.
 
 ##Changes I would like to make in future versions of the game include:
