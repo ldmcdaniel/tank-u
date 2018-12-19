@@ -1,0 +1,13 @@
+image: node:6
+
+build:
+  type: build
+  script:
+    - npm i
+    - npm i bower
+    - bower install
+    - npm i -g grunt-cli
+    - grunt build
+    - grunt serve
+  only:
+    - master
